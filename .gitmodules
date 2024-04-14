@@ -62,3 +62,12 @@
 	path = src/modules/uxrce_dds_client/Micro-XRCE-DDS-Client
 	url = https://github.com/PX4/Micro-XRCE-DDS-Client.git
 	branch = px4
+[submodule "src/lib/src/control-toolbox"]
+	path = src/lib/src/control-toolbox
+	url = https://github.com/ethz-adrl/control-toolbox.git
+[submodule "src/lib/kindr"]
+	path = src/lib/kindr
+	url = https://github.com/ANYbotics/kindr.git
+[submodule "src/lib/control-toolbox"]
+	path = src/lib/control-toolbox
+	url = https://github.com/ethz-adrl/control-toolbox.git

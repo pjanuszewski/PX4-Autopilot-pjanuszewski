@@ -1,0 +1,836 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "src/modules/simulation/simulator_mavlink/libmodules__simulation__simulator_mavlink.a"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"px4_add_module",
+			"add_dependencies",
+			"target_link_libraries",
+			"add_compile_options",
+			"px4_add_common_flags",
+			"target_compile_options",
+			"add_definitions",
+			"include",
+			"dart_traverse_components",
+			"dart_package_init",
+			"find_package",
+			"target_compile_definitions",
+			"px4_os_add_flags",
+			"include_directories",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"cmake/px4_add_module.cmake",
+			"src/modules/simulation/simulator_mavlink/CMakeLists.txt",
+			"src/modules/flight_mode_manager/CMakeLists.txt",
+			"src/lib/events/CMakeLists.txt",
+			"cmake/px4_add_common_flags.cmake",
+			"CMakeLists.txt",
+			"/usr/share/dart/cmake/DARTFindBoost.cmake",
+			"/usr/share/dart/cmake/dart_dartComponent.cmake",
+			"/usr/share/dart/cmake/DARTConfig.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/gazebo/gazebo-config.cmake",
+			"src/modules/simulation/simulator_mavlink/sitl_targets_gazebo-classic.cmake",
+			"platforms/posix/cmake/px4_impl_os.cmake",
+			"cmake/px4_config.cmake",
+			"cmake/kconfig.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 34,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 151,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 155,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 174,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 169,
+				"parent" : 1
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 89,
+				"parent" : 11
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 239,
+				"parent" : 1
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 112,
+				"parent" : 14
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 5,
+				"file" : 5,
+				"line" : 330,
+				"parent" : 16
+			},
+			{
+				"command" : 4,
+				"file" : 4,
+				"line" : 45,
+				"parent" : 17
+			},
+			{
+				"command" : 4,
+				"file" : 4,
+				"line" : 114,
+				"parent" : 17
+			},
+			{
+				"command" : 4,
+				"file" : 4,
+				"line" : 118,
+				"parent" : 17
+			},
+			{
+				"command" : 4,
+				"file" : 4,
+				"line" : 121,
+				"parent" : 17
+			},
+			{
+				"command" : 4,
+				"file" : 4,
+				"line" : 134,
+				"parent" : 17
+			},
+			{
+				"command" : 4,
+				"file" : 4,
+				"line" : 171,
+				"parent" : 17
+			},
+			{
+				"command" : 4,
+				"file" : 4,
+				"line" : 171,
+				"parent" : 17
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 220,
+				"parent" : 1
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 224,
+				"parent" : 1
+			},
+			{
+				"command" : 8,
+				"file" : 1,
+				"line" : 59,
+				"parent" : 0
+			},
+			{
+				"file" : 10,
+				"parent" : 27
+			},
+			{
+				"command" : 11,
+				"file" : 10,
+				"line" : 2,
+				"parent" : 28
+			},
+			{
+				"file" : 9,
+				"parent" : 29
+			},
+			{
+				"command" : 11,
+				"file" : 9,
+				"line" : 166,
+				"parent" : 30
+			},
+			{
+				"file" : 8,
+				"parent" : 31
+			},
+			{
+				"command" : 10,
+				"file" : 8,
+				"line" : 181,
+				"parent" : 32
+			},
+			{
+				"command" : 9,
+				"file" : 8,
+				"line" : 133,
+				"parent" : 33
+			},
+			{
+				"command" : 8,
+				"file" : 8,
+				"line" : 73,
+				"parent" : 34
+			},
+			{
+				"file" : 7,
+				"parent" : 35
+			},
+			{
+				"command" : 8,
+				"file" : 7,
+				"line" : 6,
+				"parent" : 36
+			},
+			{
+				"file" : 6,
+				"parent" : 37
+			},
+			{
+				"command" : 7,
+				"file" : 6,
+				"line" : 13,
+				"parent" : 38
+			},
+			{
+				"command" : 7,
+				"file" : 4,
+				"line" : 194,
+				"parent" : 17
+			},
+			{
+				"command" : 7,
+				"file" : 5,
+				"line" : 193,
+				"parent" : 16
+			},
+			{
+				"command" : 7,
+				"file" : 9,
+				"line" : 142,
+				"parent" : 30
+			},
+			{
+				"command" : 7,
+				"file" : 9,
+				"line" : 148,
+				"parent" : 30
+			},
+			{
+				"command" : 12,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 12,
+				"file" : 0,
+				"line" : 213,
+				"parent" : 1
+			},
+			{
+				"command" : 13,
+				"file" : 5,
+				"line" : 331,
+				"parent" : 16
+			},
+			{
+				"command" : 7,
+				"file" : 11,
+				"line" : 236,
+				"parent" : 46
+			},
+			{
+				"command" : 7,
+				"file" : 11,
+				"line" : 216,
+				"parent" : 46
+			},
+			{
+				"command" : 8,
+				"file" : 5,
+				"line" : 179,
+				"parent" : 16
+			},
+			{
+				"file" : 12,
+				"parent" : 49
+			},
+			{
+				"command" : 14,
+				"file" : 12,
+				"line" : 98,
+				"parent" : 50
+			},
+			{
+				"command" : 8,
+				"file" : 5,
+				"line" : 180,
+				"parent" : 16
+			},
+			{
+				"file" : 13,
+				"parent" : 52
+			},
+			{
+				"command" : 14,
+				"file" : 13,
+				"line" : 235,
+				"parent" : 53
+			},
+			{
+				"command" : 14,
+				"file" : 4,
+				"line" : 175,
+				"parent" : 17
+			},
+			{
+				"command" : 14,
+				"file" : 11,
+				"line" : 221,
+				"parent" : 46
+			},
+			{
+				"command" : 14,
+				"file" : 5,
+				"line" : 362,
+				"parent" : 16
+			},
+			{
+				"command" : 15,
+				"file" : 0,
+				"line" : 228,
+				"parent" : 1
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/pawelj/miniconda3/include -O2 -g -DNDEBUG -fPIC"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-g"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-fdata-sections"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-ffunction-sections"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-fomit-frame-pointer"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-fmerge-all-constants"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-fno-signed-zeros"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-fno-trapping-math"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-freciprocal-math"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-fno-math-errno"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-fno-strict-aliasing"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-fvisibility=hidden"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-include"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "visibility.h"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wextra"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Werror"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Warray-bounds"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wcast-align"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wdisabled-optimization"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wdouble-promotion"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wfatal-errors"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wfloat-equal"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wformat-security"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Winit-self"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wlogical-op"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wpointer-arith"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wshadow"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wuninitialized"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wunknown-pragmas"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wunused-variable"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wno-missing-field-initializers"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wno-missing-include-dirs"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-Wno-unused-parameter"
+				},
+				{
+					"backtrace" : 19,
+					"fragment" : "-fdiagnostics-color=always"
+				},
+				{
+					"backtrace" : 20,
+					"fragment" : "-Wno-stringop-truncation"
+				},
+				{
+					"backtrace" : 21,
+					"fragment" : "-fno-builtin-printf"
+				},
+				{
+					"backtrace" : 21,
+					"fragment" : "-fno-strength-reduce"
+				},
+				{
+					"backtrace" : 21,
+					"fragment" : "-Wformat=1"
+				},
+				{
+					"backtrace" : 21,
+					"fragment" : "-Wunused-but-set-variable"
+				},
+				{
+					"backtrace" : 21,
+					"fragment" : "-Wno-format-truncation"
+				},
+				{
+					"backtrace" : 22,
+					"fragment" : "-fcheck-new"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wreorder"
+				},
+				{
+					"backtrace" : 24,
+					"fragment" : "-Wno-overloaded-virtual"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wno-double-promotion"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wno-cast-align"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wno-address-of-packed-member"
+				},
+				{
+					"backtrace" : 26,
+					"fragment" : "-D__KERNEL__"
+				},
+				{
+					"fragment" : "-std=gnu++14"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 39,
+					"define" : "BOOST_TEST_DYN_LINK"
+				},
+				{
+					"backtrace" : 40,
+					"define" : "CONFIG_ARCH_BOARD_PX4_SITL"
+				},
+				{
+					"backtrace" : 41,
+					"define" : "ENABLE_LOCKSTEP_SCHEDULER"
+				},
+				{
+					"backtrace" : 42,
+					"define" : "LIBBULLET_VERSION=3.05"
+				},
+				{
+					"backtrace" : 43,
+					"define" : "LIBBULLET_VERSION_GT_282"
+				},
+				{
+					"backtrace" : 44,
+					"define" : "MODULE_NAME=\"simulator_mavlink\""
+				},
+				{
+					"backtrace" : 45,
+					"define" : "PX4_MAIN=simulator_mavlink_app_main"
+				},
+				{
+					"backtrace" : 40,
+					"define" : "__CUSTOM_FILE_IO__"
+				},
+				{
+					"backtrace" : 47,
+					"define" : "__PX4_LINUX"
+				},
+				{
+					"backtrace" : 48,
+					"define" : "__PX4_POSIX"
+				},
+				{
+					"backtrace" : 40,
+					"define" : "__STDC_FORMAT_MACROS"
+				},
+				{
+					"backtrace" : 48,
+					"define" : "noreturn_function=__attribute__((noreturn))"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 51,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/boards/px4/sitl/src"
+				},
+				{
+					"backtrace" : 54,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/posix/src/px4/common/include"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/src/lib"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/posix/src/px4/generic/generic/include"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/common"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/common/include"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/include"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/lib"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/matrix"
+				},
+				{
+					"backtrace" : 55,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/modules"
+				},
+				{
+					"backtrace" : 56,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/posix/include"
+				},
+				{
+					"backtrace" : 57,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Install/include"
+				},
+				{
+					"backtrace" : 58,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink"
+				},
+				{
+					"backtrace" : 58,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink/development"
+				},
+				{
+					"backtrace" : 58,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink/common"
+				},
+				{
+					"backtrace" : 58,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink/standard"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2
+				],
+				"standard" : "14"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "uorb_headers::@87da20e8da9c58e355ca"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "uorb_msgs::@87da20e8da9c58e355ca"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "cdev::@486c09b1dd2eb468d1b8"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "conversion::@799cc045a91375c93c85"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "drivers_accelerometer::@0bf5022875b8e01a3345"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "drivers_gyroscope::@0e4539b7be9fa97acfc4"
+		},
+		{
+			"backtrace" : 8,
+			"id" : "drivers_magnetometer::@59d140376cec04eac720"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "geo::@98fdcee2b11418b2ae8c"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "perf::@25bdab5b7fa021aa5d4c"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "systemlib::@f1c82114109d59f0af77"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "tinybson::@8e13947b44723869e90e"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "px4_layer::@13eebd0deb9b16358cc5"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "uORB::@afa8ade38fd817f34bcc"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "work_queue::@4a51fd9749b041c0a765"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "flighttasks_generated::@3320806e5a654be0ce98"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "mavlink_c_generate::@583fe9156e84f4c4698e"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "drivers_board::@a7b731bd9dab5511b243"
+		},
+		{
+			"backtrace" : 15,
+			"id" : "events_header::@5cf9bdc8231d57945e1e"
+		}
+	],
+	"id" : "modules__simulation__simulator_mavlink::@2b2ba8b30dd5813ab657",
+	"name" : "modules__simulation__simulator_mavlink",
+	"nameOnDisk" : "libmodules__simulation__simulator_mavlink.a",
+	"paths" : 
+	{
+		"build" : "src/modules/simulation/simulator_mavlink",
+		"source" : "src/modules/simulation/simulator_mavlink"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "src/modules/simulation/simulator_mavlink/SimulatorMavlink.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "src/modules/simulation/simulator_mavlink/SimulatorMavlink.hpp",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

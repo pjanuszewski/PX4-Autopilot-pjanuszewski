@@ -126,5 +126,5 @@ int px4_simple_app_main(int argc, char *argv[])
 
 	PX4_INFO("exiting");
 
-	return 0;
+	return 1;
 }

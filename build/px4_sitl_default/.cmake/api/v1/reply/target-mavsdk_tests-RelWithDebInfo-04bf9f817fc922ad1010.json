@@ -1,0 +1,146 @@
+{
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"ExternalProject_Add",
+			"include"
+		],
+		"files" : 
+		[
+			"/usr/share/cmake-3.22/Modules/ExternalProject.cmake",
+			"src/modules/simulation/simulator_mavlink/sitl_targets_gazebo-classic.cmake",
+			"src/modules/simulation/simulator_mavlink/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 59,
+				"parent" : 0
+			},
+			{
+				"file" : 1,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 243,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 3530,
+				"parent" : 3
+			}
+		]
+	},
+	"folder" : 
+	{
+		"name" : "ExternalProjectTargets/mavsdk_tests"
+	},
+	"id" : "mavsdk_tests::@2b2ba8b30dd5813ab657",
+	"name" : "mavsdk_tests",
+	"paths" : 
+	{
+		"build" : "src/modules/simulation/simulator_mavlink",
+		"source" : "src/modules/simulation/simulator_mavlink"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 4,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/mavsdk_tests",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/mavsdk_tests.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/mavsdk_tests-complete.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/external/Stamp/mavsdk_tests/mavsdk_tests-build.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/external/Stamp/mavsdk_tests/mavsdk_tests-configure.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/external/Stamp/mavsdk_tests/mavsdk_tests-download.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/external/Stamp/mavsdk_tests/mavsdk_tests-install.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/external/Stamp/mavsdk_tests/mavsdk_tests-mkdir.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/external/Stamp/mavsdk_tests/mavsdk_tests-patch.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/external/Stamp/mavsdk_tests/mavsdk_tests-update.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

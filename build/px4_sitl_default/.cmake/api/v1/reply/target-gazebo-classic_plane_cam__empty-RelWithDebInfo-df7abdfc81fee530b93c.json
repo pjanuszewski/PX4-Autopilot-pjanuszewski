@@ -1,0 +1,88 @@
+{
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"include"
+		],
+		"files" : 
+		[
+			"src/modules/simulation/simulator_mavlink/sitl_targets_gazebo-classic.cmake",
+			"src/modules/simulation/simulator_mavlink/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 59,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 220,
+				"parent" : 2
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "sitl_gazebo-classic::@2b2ba8b30dd5813ab657"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "px4::@5d9bc03c265b0d8f956f"
+		}
+	],
+	"id" : "gazebo-classic_plane_cam__empty::@2b2ba8b30dd5813ab657",
+	"name" : "gazebo-classic_plane_cam__empty",
+	"paths" : 
+	{
+		"build" : "src/modules/simulation/simulator_mavlink",
+		"source" : "src/modules/simulation/simulator_mavlink"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 3,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/gazebo-classic_plane_cam__empty",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/gazebo-classic_plane_cam__empty.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

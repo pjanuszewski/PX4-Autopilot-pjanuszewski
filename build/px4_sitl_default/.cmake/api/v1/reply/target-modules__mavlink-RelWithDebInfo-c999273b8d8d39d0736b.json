@@ -1,0 +1,1354 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "src/modules/mavlink/libmodules__mavlink.a"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"px4_add_module",
+			"add_dependencies",
+			"target_link_libraries",
+			"add_compile_options",
+			"px4_add_common_flags",
+			"px4_os_add_flags",
+			"target_compile_options",
+			"add_definitions",
+			"target_compile_definitions",
+			"include_directories",
+			"include"
+		],
+		"files" : 
+		[
+			"cmake/px4_add_module.cmake",
+			"src/modules/mavlink/CMakeLists.txt",
+			"src/lib/version/CMakeLists.txt",
+			"src/modules/flight_mode_manager/CMakeLists.txt",
+			"src/lib/events/CMakeLists.txt",
+			"cmake/px4_add_common_flags.cmake",
+			"CMakeLists.txt",
+			"platforms/posix/cmake/px4_impl_os.cmake",
+			"cmake/px4_config.cmake",
+			"cmake/kconfig.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 103,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 151,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 155,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 174,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 239,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 169,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 69,
+				"parent" : 16
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 3,
+				"line" : 89,
+				"parent" : 19
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 2,
+				"file" : 4,
+				"line" : 112,
+				"parent" : 21
+			},
+			{
+				"file" : 6
+			},
+			{
+				"command" : 5,
+				"file" : 6,
+				"line" : 330,
+				"parent" : 23
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 45,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 114,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 118,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 121,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 151,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 151,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 151,
+				"parent" : 24
+			},
+			{
+				"command" : 6,
+				"file" : 6,
+				"line" : 331,
+				"parent" : 23
+			},
+			{
+				"command" : 4,
+				"file" : 7,
+				"line" : 241,
+				"parent" : 32
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 220,
+				"parent" : 1
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 224,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 237,
+				"parent" : 1
+			},
+			{
+				"command" : 8,
+				"file" : 5,
+				"line" : 194,
+				"parent" : 24
+			},
+			{
+				"command" : 8,
+				"file" : 6,
+				"line" : 193,
+				"parent" : 23
+			},
+			{
+				"command" : 9,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 9,
+				"file" : 0,
+				"line" : 213,
+				"parent" : 1
+			},
+			{
+				"command" : 8,
+				"file" : 7,
+				"line" : 236,
+				"parent" : 32
+			},
+			{
+				"command" : 8,
+				"file" : 7,
+				"line" : 216,
+				"parent" : 32
+			},
+			{
+				"command" : 11,
+				"file" : 6,
+				"line" : 179,
+				"parent" : 23
+			},
+			{
+				"file" : 8,
+				"parent" : 43
+			},
+			{
+				"command" : 10,
+				"file" : 8,
+				"line" : 98,
+				"parent" : 44
+			},
+			{
+				"command" : 11,
+				"file" : 6,
+				"line" : 180,
+				"parent" : 23
+			},
+			{
+				"file" : 9,
+				"parent" : 46
+			},
+			{
+				"command" : 10,
+				"file" : 9,
+				"line" : 235,
+				"parent" : 47
+			},
+			{
+				"command" : 10,
+				"file" : 5,
+				"line" : 175,
+				"parent" : 24
+			},
+			{
+				"command" : 10,
+				"file" : 7,
+				"line" : 221,
+				"parent" : 32
+			},
+			{
+				"command" : 10,
+				"file" : 6,
+				"line" : 362,
+				"parent" : 23
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 134,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 171,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 171,
+				"parent" : 24
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/pawelj/miniconda3/include -O2 -g -DNDEBUG -fPIC"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-g"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fdata-sections"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-ffunction-sections"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fomit-frame-pointer"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fmerge-all-constants"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fno-signed-zeros"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fno-trapping-math"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-freciprocal-math"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fno-math-errno"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fno-strict-aliasing"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fvisibility=hidden"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-include"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "visibility.h"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wextra"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Werror"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Warray-bounds"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wcast-align"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wdisabled-optimization"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wdouble-promotion"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wfatal-errors"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wfloat-equal"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wformat-security"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Winit-self"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wlogical-op"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wpointer-arith"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wshadow"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wuninitialized"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wunknown-pragmas"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wunused-variable"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wno-missing-field-initializers"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wno-missing-include-dirs"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wno-unused-parameter"
+				},
+				{
+					"backtrace" : 26,
+					"fragment" : "-fdiagnostics-color=always"
+				},
+				{
+					"backtrace" : 27,
+					"fragment" : "-Wno-stringop-truncation"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-fno-builtin-printf"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-fno-strength-reduce"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-Wformat=1"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-Wunused-but-set-variable"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-Wno-format-truncation"
+				},
+				{
+					"backtrace" : 29,
+					"fragment" : "-fno-common"
+				},
+				{
+					"backtrace" : 30,
+					"fragment" : "-Wnested-externs"
+				},
+				{
+					"backtrace" : 31,
+					"fragment" : "-Wstrict-prototypes"
+				},
+				{
+					"backtrace" : 33,
+					"fragment" : "-Wbad-function-cast"
+				},
+				{
+					"backtrace" : 34,
+					"fragment" : "-Wno-enum-compare"
+				},
+				{
+					"backtrace" : 35,
+					"fragment" : "-D__KERNEL__"
+				},
+				{
+					"backtrace" : 36,
+					"fragment" : "-Wno-address-of-packed-member"
+				},
+				{
+					"backtrace" : 36,
+					"fragment" : "-Wno-cast-align"
+				},
+				{
+					"fragment" : "-std=gnu11"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 37,
+					"define" : "CONFIG_ARCH_BOARD_PX4_SITL"
+				},
+				{
+					"backtrace" : 38,
+					"define" : "ENABLE_LOCKSTEP_SCHEDULER"
+				},
+				{
+					"backtrace" : 39,
+					"define" : "MODULE_NAME=\"mavlink\""
+				},
+				{
+					"backtrace" : 18,
+					"define" : "PX4_BOARD_LABEL=\"default\""
+				},
+				{
+					"backtrace" : 18,
+					"define" : "PX4_BOARD_NAME=\"PX4_SITL\""
+				},
+				{
+					"backtrace" : 40,
+					"define" : "PX4_MAIN=mavlink_app_main"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__CUSTOM_FILE_IO__"
+				},
+				{
+					"backtrace" : 41,
+					"define" : "__PX4_LINUX"
+				},
+				{
+					"backtrace" : 42,
+					"define" : "__PX4_POSIX"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__STDC_FORMAT_MACROS"
+				},
+				{
+					"backtrace" : 42,
+					"define" : "noreturn_function=__attribute__((noreturn))"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 45,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/boards/px4/sitl/src"
+				},
+				{
+					"backtrace" : 48,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/posix/src/px4/common/include"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/src/lib"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/posix/src/px4/generic/generic/include"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/common"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/common/include"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/include"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/lib"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/matrix"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/modules"
+				},
+				{
+					"backtrace" : 50,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/posix/include"
+				},
+				{
+					"backtrace" : 51,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Install/include"
+				},
+				{
+					"backtrace" : 36,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink"
+				},
+				{
+					"backtrace" : 36,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink/development"
+				},
+				{
+					"backtrace" : 36,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink/uAvionix"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/variable_length_ringbuffer"
+				}
+			],
+			"language" : "C",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2
+				],
+				"standard" : "11"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-fvisibility-inlines-hidden -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/pawelj/miniconda3/include -O2 -g -DNDEBUG -fPIC"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-g"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fdata-sections"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-ffunction-sections"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fomit-frame-pointer"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fmerge-all-constants"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fno-signed-zeros"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fno-trapping-math"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-freciprocal-math"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fno-math-errno"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fno-strict-aliasing"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-fvisibility=hidden"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-include"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "visibility.h"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wextra"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Werror"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Warray-bounds"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wcast-align"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wdisabled-optimization"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wdouble-promotion"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wfatal-errors"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wfloat-equal"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wformat-security"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Winit-self"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wlogical-op"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wpointer-arith"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wshadow"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wuninitialized"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wunknown-pragmas"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wunused-variable"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wno-missing-field-initializers"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wno-missing-include-dirs"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-Wno-unused-parameter"
+				},
+				{
+					"backtrace" : 26,
+					"fragment" : "-fdiagnostics-color=always"
+				},
+				{
+					"backtrace" : 27,
+					"fragment" : "-Wno-stringop-truncation"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-fno-builtin-printf"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-fno-strength-reduce"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-Wformat=1"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-Wunused-but-set-variable"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-Wno-format-truncation"
+				},
+				{
+					"backtrace" : 52,
+					"fragment" : "-fcheck-new"
+				},
+				{
+					"backtrace" : 53,
+					"fragment" : "-Wreorder"
+				},
+				{
+					"backtrace" : 54,
+					"fragment" : "-Wno-overloaded-virtual"
+				},
+				{
+					"backtrace" : 34,
+					"fragment" : "-Wno-enum-compare"
+				},
+				{
+					"backtrace" : 35,
+					"fragment" : "-D__KERNEL__"
+				},
+				{
+					"backtrace" : 36,
+					"fragment" : "-Wno-address-of-packed-member"
+				},
+				{
+					"backtrace" : 36,
+					"fragment" : "-Wno-cast-align"
+				},
+				{
+					"fragment" : "-std=gnu++14"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 37,
+					"define" : "CONFIG_ARCH_BOARD_PX4_SITL"
+				},
+				{
+					"backtrace" : 38,
+					"define" : "ENABLE_LOCKSTEP_SCHEDULER"
+				},
+				{
+					"backtrace" : 39,
+					"define" : "MODULE_NAME=\"mavlink\""
+				},
+				{
+					"backtrace" : 18,
+					"define" : "PX4_BOARD_LABEL=\"default\""
+				},
+				{
+					"backtrace" : 18,
+					"define" : "PX4_BOARD_NAME=\"PX4_SITL\""
+				},
+				{
+					"backtrace" : 40,
+					"define" : "PX4_MAIN=mavlink_app_main"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__CUSTOM_FILE_IO__"
+				},
+				{
+					"backtrace" : 41,
+					"define" : "__PX4_LINUX"
+				},
+				{
+					"backtrace" : 42,
+					"define" : "__PX4_POSIX"
+				},
+				{
+					"backtrace" : 37,
+					"define" : "__STDC_FORMAT_MACROS"
+				},
+				{
+					"backtrace" : 42,
+					"define" : "noreturn_function=__attribute__((noreturn))"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 45,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/boards/px4/sitl/src"
+				},
+				{
+					"backtrace" : 48,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/posix/src/px4/common/include"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/src/lib"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/posix/src/px4/generic/generic/include"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/common"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/common/include"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/include"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/lib"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/matrix"
+				},
+				{
+					"backtrace" : 49,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/modules"
+				},
+				{
+					"backtrace" : 50,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/platforms/posix/include"
+				},
+				{
+					"backtrace" : 51,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Install/include"
+				},
+				{
+					"backtrace" : 36,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink"
+				},
+				{
+					"backtrace" : 36,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink/development"
+				},
+				{
+					"backtrace" : 36,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/mavlink/uAvionix"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/variable_length_ringbuffer"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2
+				],
+				"standard" : "14"
+			},
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "uorb_headers::@87da20e8da9c58e355ca"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "uorb_msgs::@87da20e8da9c58e355ca"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "adsb::@dfad60d30f196ab0a9e2"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "airspeed::@51b991d5807708af06c8"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "cdev::@486c09b1dd2eb468d1b8"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "circuit_breaker::@e4f77452a3966ca624be"
+		},
+		{
+			"backtrace" : 8,
+			"id" : "component_general_json::@6708e416d337ae9e7774"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "conversion::@799cc045a91375c93c85"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "drivers_accelerometer::@0bf5022875b8e01a3345"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "drivers_gyroscope::@0e4539b7be9fa97acfc4"
+		},
+		{
+			"backtrace" : 11,
+			"id" : "drivers_magnetometer::@59d140376cec04eac720"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "geo::@98fdcee2b11418b2ae8c"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "perf::@25bdab5b7fa021aa5d4c"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "ringbuffer::@16b34cbb4b5d649f1fde"
+		},
+		{
+			"backtrace" : 14,
+			"id" : "sensor_calibration::@868ec604c463d1b1bbd5"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "systemlib::@f1c82114109d59f0af77"
+		},
+		{
+			"backtrace" : 15,
+			"id" : "timesync::@4161e98748ce817b0405"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "tinybson::@8e13947b44723869e90e"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "tunes::@1600209e4069d3c42e2f"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "variable_length_ringbuffer::@e8540ad4d5fddf1705e5"
+		},
+		{
+			"backtrace" : 17,
+			"id" : "ver_gen::@e0eff460355dd36c32f3"
+		},
+		{
+			"backtrace" : 18,
+			"id" : "version::@e0eff460355dd36c32f3"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "px4_layer::@13eebd0deb9b16358cc5"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "uORB::@afa8ade38fd817f34bcc"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "work_queue::@4a51fd9749b041c0a765"
+		},
+		{
+			"backtrace" : 20,
+			"id" : "flighttasks_generated::@3320806e5a654be0ce98"
+		},
+		{
+			"id" : "git_mavlink_v2::@583fe9156e84f4c4698e"
+		},
+		{
+			"id" : "mavlink_c_generate_uavionix::@583fe9156e84f4c4698e"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "drivers_board::@a7b731bd9dab5511b243"
+		},
+		{
+			"backtrace" : 22,
+			"id" : "events_header::@5cf9bdc8231d57945e1e"
+		}
+	],
+	"id" : "modules__mavlink::@583fe9156e84f4c4698e",
+	"name" : "modules__mavlink",
+	"nameOnDisk" : "libmodules__mavlink.a",
+	"paths" : 
+	{
+		"build" : "src/modules/mavlink",
+		"source" : "src/modules/mavlink"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				18,
+				19
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				20,
+				21
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "src/modules/mavlink/mavlink.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_command_sender.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_events.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_ftp.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_log_handler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_messages.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_mission.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_parameters.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_rate_limiter.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_receiver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_shell.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_simple_analyzer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_stream.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_timesync.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/mavlink_ulog.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/MavlinkStatustextHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "src/modules/mavlink/tune_publisher.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/mavlink/development/development.h.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/mavlink/uAvionix/uAvionix.h.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 36,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/mavlink/development/development.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 36,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/mavlink/uAvionix/uAvionix.h",
+			"sourceGroupIndex" : 2
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

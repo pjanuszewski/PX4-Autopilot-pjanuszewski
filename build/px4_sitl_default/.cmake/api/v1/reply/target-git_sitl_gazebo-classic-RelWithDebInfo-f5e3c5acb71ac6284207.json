@@ -1,0 +1,93 @@
+{
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"px4_add_git_submodule",
+			"include"
+		],
+		"files" : 
+		[
+			"cmake/px4_git.cmake",
+			"src/modules/simulation/simulator_mavlink/sitl_targets_gazebo-classic.cmake",
+			"src/modules/simulation/simulator_mavlink/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 59,
+				"parent" : 0
+			},
+			{
+				"file" : 1,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 45,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 90,
+				"parent" : 3
+			}
+		]
+	},
+	"id" : "git_sitl_gazebo-classic::@2b2ba8b30dd5813ab657",
+	"name" : "git_sitl_gazebo-classic",
+	"paths" : 
+	{
+		"build" : "src/modules/simulation/simulator_mavlink",
+		"source" : "src/modules/simulation/simulator_mavlink"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 4,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/git_sitl_gazebo-classic",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/git_sitl_gazebo-classic.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/px4_sitl_default/src/modules/simulation/simulator_mavlink/git_init__home_pawelj_Git_repos_PX4-Autopilot_Tools_simulation_gazebo-classic_sitl_gazebo-classic.stamp.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

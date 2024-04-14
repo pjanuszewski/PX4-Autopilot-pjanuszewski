@@ -1,0 +1,13 @@
+# Target labels
+ sitl_gazebo-classic
+# Source files and their labels
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/sitl_gazebo-classic
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/sitl_gazebo-classic.rule
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/src/modules/simulation/simulator_mavlink/CMakeFiles/sitl_gazebo-classic-complete.rule
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Stamp/sitl_gazebo-classic/sitl_gazebo-classic-build.rule
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Stamp/sitl_gazebo-classic/sitl_gazebo-classic-configure.rule
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Stamp/sitl_gazebo-classic/sitl_gazebo-classic-download.rule
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Stamp/sitl_gazebo-classic/sitl_gazebo-classic-install.rule
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Stamp/sitl_gazebo-classic/sitl_gazebo-classic-mkdir.rule
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Stamp/sitl_gazebo-classic/sitl_gazebo-classic-patch.rule
+/home/pawelj/Git_repos/PX4-Autopilot/build/px4_sitl_default/external/Stamp/sitl_gazebo-classic/sitl_gazebo-classic-update.rule
