@@ -31,12 +31,31 @@
 #
 ############################################################################
 
+# Find the Eigen3 package
+find_package(Eigen3 REQUIRED)
+find_package(OpenMP)
+
+
 px4_add_library(RateControl
 	rate_control.cpp
 	rate_control.hpp
 )
 target_compile_options(RateControl PRIVATE ${MAX_CUSTOM_OPT_LEVEL})
-target_include_directories(RateControl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(RateControl PUBLIC
+	${CMAKE_CURRENT_SOURCE_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}/src/lib/control-toolbox/ct_core/include
+	${CMAKE_CURRENT_SOURCE_DIR}/src/lib/control-toolbox/ct_optcon/include
+)
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(RateControl PUBLIC OpenMP::OpenMP_CXX)
+else()
+    message(STATUS "OpenMP not found")
+endif()
+
+include_directories(${EIGEN3_INCLUDE_DIR})
+
 target_link_libraries(RateControl PRIVATE mathlib)
+target_link_libraries(RateControl PRIVATE ct_core ct_optcon)
 
 px4_add_unit_gtest(SRC rate_control_test.cpp LINKLIBS RateControl)

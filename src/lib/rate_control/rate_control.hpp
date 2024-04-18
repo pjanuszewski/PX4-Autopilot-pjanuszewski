@@ -39,6 +39,7 @@
 
 #pragma once
 
+#include <control-toolbox/ct_optcon/include/ct/optcon/optcon.h>
 #include <matrix/matrix/math.hpp>
 
 #include <mathlib/mathlib.h>
