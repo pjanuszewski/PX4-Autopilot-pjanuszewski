@@ -41,10 +41,18 @@ px4_add_library(RateControl
 	rate_control.hpp
 )
 target_compile_options(RateControl PRIVATE ${MAX_CUSTOM_OPT_LEVEL})
+# Assuming ${CONTROL_TOOLBOX_PATH} is set to the parent directory of ct_core and ct_optcon
+set(CONTROL_TOOLBOX_PATH "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/control-toolbox")
+
+# Apply -Wno-float-equal only if using GNU C++ or Clang compilers
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(RateControl PRIVATE -Wno-float-equal)
+endif()
+
 target_include_directories(RateControl PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}/src/lib/control-toolbox/ct_core/include
-	${CMAKE_CURRENT_SOURCE_DIR}/src/lib/control-toolbox/ct_optcon/include
+	${CONTROL_TOOLBOX_PATH}/ct_core/include
+	${CONTROL_TOOLBOX_PATH}/ct_optcon/include
 )
 
 if(OpenMP_CXX_FOUND)
@@ -55,7 +63,11 @@ endif()
 
 include_directories(${EIGEN3_INCLUDE_DIR})
 
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(RateControl PRIVATE -Wno-float-equal)
+endif()
+
 target_link_libraries(RateControl PRIVATE mathlib)
-target_link_libraries(RateControl PRIVATE ct_core ct_optcon)
+target_link_libraries(RateControl PRIVATE ct_optcon)
 
 px4_add_unit_gtest(SRC rate_control_test.cpp LINKLIBS RateControl)

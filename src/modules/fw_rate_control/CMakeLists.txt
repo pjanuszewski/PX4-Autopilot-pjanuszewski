@@ -42,3 +42,7 @@ px4_add_module(
 		RateControl
 		SlewRate
 	)
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+	target_compile_options(modules__fw_rate_control PRIVATE -Wno-float-equal)
+endif()

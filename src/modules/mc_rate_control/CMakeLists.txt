@@ -45,3 +45,7 @@ px4_add_module(
 		RateControl
 		px4_work_queue
 	)
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+	target_compile_options(modules__mc_rate_control PRIVATE -Wno-float-equal)
+endif()
