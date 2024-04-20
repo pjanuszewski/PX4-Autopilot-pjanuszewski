@@ -41,8 +41,11 @@ px4_add_library(RateControl
 	rate_control.hpp
 )
 target_compile_options(RateControl PRIVATE ${MAX_CUSTOM_OPT_LEVEL})
+
 # Assuming ${CONTROL_TOOLBOX_PATH} is set to the parent directory of ct_core and ct_optcon
-set(CONTROL_TOOLBOX_PATH "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/control-toolbox")
+set(CONTROL_TOOLBOX_PATH "${PX4_SOURCE_DIR}/src/lib/control-toolbox")
+set(MODEL_SDF_PATH "${PX4_SOURCE_DIR}/Tools/simulation/gz/models/x500_base/model.sdf" CACHE STRING "Path to the model SDF file")
+add_definitions(-DMODEL_SDF_PATH="${MODEL_SDF_PATH}")
 
 # Apply -Wno-float-equal only if using GNU C++ or Clang compilers
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")

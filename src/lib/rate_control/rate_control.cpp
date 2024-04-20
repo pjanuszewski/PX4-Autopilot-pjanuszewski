@@ -85,6 +85,104 @@ Vector3f RateControl::update(const Vector3f &rate, const Vector3f &rate_sp, cons
 	return torque;
 }
 
+bool RateControl::parseSDFInertiaAndMass(const std::string &filename, float &I_xx, float &I_yy, float &I_zz, float &mass)
+{
+	tinyxml2::XMLDocument doc;
+	if (doc.LoadFile(filename.c_str()) != tinyxml2::XML_SUCCESS) {
+		std::cerr << "Loading SDF file failed." << std::endl;
+		return false;
+	}
+
+	tinyxml2::XMLElement * modelElement = doc.FirstChildElement("sdf")->FirstChildElement("model");
+	if (!modelElement) {
+		std::cerr << "Model element not found in SDF." << std::endl;
+		return false;
+	}
+
+	tinyxml2::XMLElement * linkElement = modelElement->FirstChildElement("link");
+	while (linkElement) {
+		if (std::string(linkElement->Attribute("name")) == "base_link") { // Assuming 'base_link' contains the inertia and mass
+		tinyxml2::XMLElement * inertialElement = linkElement->FirstChildElement("inertial");
+		if (inertialElement) {
+			tinyxml2::XMLElement * massElement = inertialElement->FirstChildElement("mass");
+			if (massElement) {
+				massElement->QueryFloatText(&mass);
+			}
+			tinyxml2::XMLElement * inertiaElement = inertialElement->FirstChildElement("inertia");
+			if (inertiaElement) {
+				inertiaElement->QueryFloatAttribute("ixx", &I_xx);
+				inertiaElement->QueryFloatAttribute("iyy", &I_yy);
+				inertiaElement->QueryFloatAttribute("izz", &I_zz);
+				return true; // Successfully found and extracted inertia and mass values
+			}
+		}
+		}
+		linkElement = linkElement->NextSiblingElement("link");
+	}
+
+	std::cerr << "Inertia or mass element not found in SDF." << std::endl;
+	return false;
+}
+
+void RateControl::setLqrMatrices()
+{
+	std::string sdfPath = MODEL_SDF_PATH; // Use the macro directly
+	float A_z = 0.1;
+	float A_r = 0.2;
+	float I_xx, I_yy, I_zz, mass;
+	parseSDFInertiaAndMass(sdfPath, I_xx, I_yy, I_zz, mass);
+
+	Q << 0.5, 0, 0, 0, 0, 0, 0, 0,
+	0, 0.5, 0, 0, 0, 0, 0, 0,
+	0, 0, 0.5, 0, 0, 0, 0, 0,
+	0, 0, 0, 0.5, 0, 0, 0, 0,
+	0, 0, 0, 0, 0.5, 0, 0, 0,
+	0, 0, 0, 0, 0, 0.5, 0, 0,
+	0, 0, 0, 0, 0, 0, 0.5, 0,
+	0, 0, 0, 0, 0, 0, 0, 0.5;
+
+	R << 0.5, 0, 0, 0,
+	0, 0.5, 0, 0,
+	0, 0, 0.5, 0,
+	0, 0, 0, 0.5;
+
+	A << 0, 0, 0, 0, 1, 0, 0, 0,
+	0, 0, 0, 0, 0, 1, 0, 0,
+	0, 0, 0, 0, 0, 0, 1, 0,
+	0, 0, 0, 0, 0, 0, 0, 1,
+	0, 0, 0, 0, -A_z / mass, 0, 0, 0,
+	0, 0, 0, 0, 0, -A_r / I_xx, 0, 0,
+	0, 0, 0, 0, 0, 0, -A_r / I_yy, 0,
+	0, 0, 0, 0, 0, 0, 0, -A_r / I_zz;
+
+	B << 0, 0, 0, 0,
+	0, 0, 0, 0,
+	0, 0, 0, 0,
+	1/mass, 0, 0, 0,
+	0, 1/I_xx, 0, 0,
+	0, 0, 1/I_yy, 0,
+	0, 0, 0, 1/I_zz;
+
+	K.setZero();
+	K_iterative.setZero();
+}
+
+Vector3f RateControl::lqrUpdate(const Vector3f &rate, const Vector3f &rate_sp, const Vector3f &angular_accel,
+				const float dt, const bool landed)
+{
+	Eigen::Matrix<double, stateDim, 1> rate_error_extended = Eigen::Matrix<double, stateDim, 1>::Zero();
+	Vector3f rate_error = rate_sp - rate;
+
+	for (size_t i = 0; i < 3; ++i) {
+    		rate_error_extended(i) = rate_error(i); // Copy the first three elements
+	}
+
+	lqr.compute(Q, R, A, B, K);
+	Eigen::Matrix<double, 3, 1> torque_temp = (-K * rate_error_extended).topRows<3>();
+	Vector3f torque(torque_temp(0), torque_temp(1), torque_temp(2));
+	return torque;
+}
+
 void RateControl::updateIntegral(Vector3f &rate_error, const float dt)
 {
 	for (int i = 0; i < 3; i++) {

@@ -39,8 +39,11 @@
 
 #pragma once
 
+#include <tinyxml2.h>
 #include <control-toolbox/ct_optcon/include/ct/optcon/optcon.h>
 #include <matrix/matrix/math.hpp>
+#include <iostream>
+#include <string>
 
 #include <mathlib/mathlib.h>
 #include <uORB/topics/rate_ctrl_status.h>
@@ -50,6 +53,14 @@ class RateControl
 public:
 	RateControl() = default;
 	~RateControl() = default;
+
+	bool parseSDFInertiaAndMass(const std::string& filename, float& I_xx, float& I_yy, float& I_zz, float& mass) {}
+
+	void setLqrMatrices(){}
+
+	matrix::Vector3f lqrUpdate(const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp, const matrix::Vector3f &angular_accel,
+				const float dt, const bool landed);
+
 
 	/**
 	 * Set the rate control PID gains
@@ -137,4 +148,19 @@ private:
 	// Feedback from control allocation
 	matrix::Vector<bool, 3> _control_allocator_saturation_negative;
 	matrix::Vector<bool, 3> _control_allocator_saturation_positive;
+
+	//LQR variables
+
+	static const size_t stateDim = 8;
+    	static const size_t controlDim = 4;
+
+	ct::optcon::LQR<stateDim, controlDim> lqr;
+
+	ct::optcon::LQR<stateDim, controlDim>::state_matrix_t A;
+	ct::optcon::LQR<stateDim, controlDim>::control_gain_matrix_t B;
+	ct::optcon::LQR<stateDim, controlDim>::state_matrix_t Q;
+    	ct::optcon::LQR<stateDim, controlDim>::control_matrix_t R;
+	ct::optcon::LQR<stateDim, controlDim>::control_feedback_t K;
+	ct::optcon::LQR<stateDim, controlDim>::control_feedback_t K_iterative;
+
 };
