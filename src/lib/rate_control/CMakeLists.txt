@@ -34,7 +34,10 @@
 # Find the Eigen3 package
 find_package(Eigen3 REQUIRED)
 find_package(OpenMP)
-
+find_library(TINYXML2_LIBRARY NAMES tinyxml2)
+if(NOT TINYXML2_LIBRARY)
+    message(FATAL_ERROR "tinyxml2 library not found")
+endif()
 
 px4_add_library(RateControl
 	rate_control.cpp
@@ -72,5 +75,7 @@ endif()
 
 target_link_libraries(RateControl PRIVATE mathlib)
 target_link_libraries(RateControl PRIVATE ct_optcon)
+target_link_libraries(RateControl PRIVATE ${TINYXML2_LIBRARY})
+
 
 px4_add_unit_gtest(SRC rate_control_test.cpp LINKLIBS RateControl)

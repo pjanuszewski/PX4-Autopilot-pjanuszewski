@@ -54,9 +54,9 @@ public:
 	RateControl() = default;
 	~RateControl() = default;
 
-	bool parseSDFInertiaAndMass(const std::string& filename, float& I_xx, float& I_yy, float& I_zz, float& mass) {}
+	bool parseSDFInertiaAndMass(const std::string& filename, float& I_xx, float& I_yy, float& I_zz, float& mass);
 
-	void setLqrMatrices(){}
+	void setLqrMatrices();
 
 	matrix::Vector3f lqrUpdate(const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp, const matrix::Vector3f &angular_accel,
 				const float dt, const bool landed);
