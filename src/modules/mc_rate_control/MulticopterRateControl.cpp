@@ -68,7 +68,7 @@ MulticopterRateControl::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
-
+	_rate_control.setLqrMatrices();
 	return true;
 }
 
@@ -79,6 +79,7 @@ MulticopterRateControl::parameters_updated()
 	// The controller gain K is used to convert the parallel (P + I/s + sD) form
 	// to the ideal (K * [1 + 1/sTi + sTd]) form
 	const Vector3f rate_k = Vector3f(_param_mc_rollrate_k.get(), _param_mc_pitchrate_k.get(), _param_mc_yawrate_k.get());
+
 
 	_rate_control.setPidGains(
 		rate_k.emult(Vector3f(_param_mc_rollrate_p.get(), _param_mc_pitchrate_p.get(), _param_mc_yawrate_p.get())),
@@ -217,9 +218,7 @@ MulticopterRateControl::Run()
 
 			//const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
 
-			_rate_control.setLqrMatrices();
-
-			const Vector3f att_control = _rate_control.lqrUpdate(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
+			const Vector3f att_control = _rate_control.lqrUpdate(rates, _rates_setpoint);
 
 
 			// publish rate controller status
