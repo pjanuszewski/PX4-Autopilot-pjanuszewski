@@ -122,7 +122,7 @@ void RateControl::setLqrMatrices()
 
 	K.setZero();
 	K_iterative.setZero();
-	lqr.compute(Q, R, A, B, K);
+	//lqr.compute(Q, R, A, B, K);
 }
 
 Vector3f RateControl::lqrUpdate(const Vector3f &rate, const Vector3f &rate_sp)

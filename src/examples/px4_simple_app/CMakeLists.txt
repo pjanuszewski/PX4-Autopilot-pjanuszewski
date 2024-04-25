@@ -34,6 +34,11 @@ px4_add_module(
 	MODULE examples__px4_simple_app
 	MAIN px4_simple_app
 	SRCS
-		px4_simple_app.c
+		px4_simple_app.cpp
 	DEPENDS
 	)
+	find_package(OpenMP)
+	if(OpenMP_CXX_FOUND)
+	    target_link_libraries(examples__px4_simple_app PUBLIC OpenMP::OpenMP_CXX)
+	endif()
+
