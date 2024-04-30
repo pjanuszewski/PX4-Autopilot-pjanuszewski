@@ -56,7 +56,7 @@ public:
 	~RateControl() = default;
 
 
-	void setLqrMatrices();
+	// void setLqrMatrices();
 
 	matrix::Vector3f lqrUpdate(const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp);
 
@@ -150,23 +150,23 @@ private:
 
 	//LQR variables
 
-	static const size_t stateDim = 8;
-    	static const size_t controlDim = 4;
+	// static const size_t stateDim = 8;
+    	// static const size_t controlDim = 4;
 
-	static constexpr float A_z = 0.1f;
-	static constexpr float A_r = 0.2f;
-	static constexpr float I_xx = 0.02f; // Inertia around the X-axis
-	static constexpr float I_yy = 0.02f; // Inertia around the Y-axis
-	static constexpr float I_zz = 0.04f; // Inertia around the Z-axis
-	static constexpr float mass = 1.5f;  // Mass of the vehicle
+	// static constexpr float A_z = 0.1f;
+	// static constexpr float A_r = 0.2f;
+	// static constexpr float I_xx = 0.02f; // Inertia around the X-axis
+	// static constexpr float I_yy = 0.02f; // Inertia around the Y-axis
+	// static constexpr float I_zz = 0.04f; // Inertia around the Z-axis
+	// static constexpr float mass = 1.5f;  // Mass of the vehicle
 
-	ct::optcon::LQR<stateDim, controlDim> lqr;
+	// ct::optcon::LQR<stateDim, controlDim> lqr;
 
-	ct::optcon::LQR<stateDim, controlDim>::state_matrix_t A;
-	ct::optcon::LQR<stateDim, controlDim>::control_gain_matrix_t B;
-	ct::optcon::LQR<stateDim, controlDim>::state_matrix_t Q;
-    	ct::optcon::LQR<stateDim, controlDim>::control_matrix_t R;
-	ct::core::FeedbackMatrix<stateDim, controlDim> K;
-	ct::optcon::LQR<stateDim, controlDim>::control_feedback_t K_iterative;
-
+	// ct::optcon::LQR<stateDim, controlDim>::state_matrix_t A;
+	// ct::optcon::LQR<stateDim, controlDim>::control_gain_matrix_t B;
+	// ct::optcon::LQR<stateDim, controlDim>::state_matrix_t Q;
+    	// ct::optcon::LQR<stateDim, controlDim>::control_matrix_t R;
+	// ct::core::FeedbackMatrix<stateDim, controlDim> K;
+	// ct::optcon::LQR<stateDim, controlDim>::control_feedback_t K_iterative;
+	matrix::Vector3f K = matrix::Vector3f(0.83923, 0.83923, 0.858301);
 };

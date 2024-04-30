@@ -37,7 +37,7 @@
 
 #include "rate_control.hpp"
 #include <px4_platform_common/defines.h>
-#include <Eigen/Dense>
+//#include <Eigen/Dense>
 
 using namespace matrix;
 
@@ -86,56 +86,49 @@ Vector3f RateControl::update(const Vector3f &rate, const Vector3f &rate_sp, cons
 	return torque;
 }
 
-void RateControl::setLqrMatrices()
-{
+// void RateControl::setLqrMatrices()
+// {
 
-	Q << 0.5, 0, 0, 0, 0, 0, 0, 0,
-	0, 0.5, 0, 0, 0, 0, 0, 0,
-	0, 0, 0.5, 0, 0, 0, 0, 0,
-	0, 0, 0, 0.5, 0, 0, 0, 0,
-	0, 0, 0, 0, 0.5, 0, 0, 0,
-	0, 0, 0, 0, 0, 0.5, 0, 0,
-	0, 0, 0, 0, 0, 0, 0.5, 0,
-	0, 0, 0, 0, 0, 0, 0, 0.5;
+	// Q << 0.5, 0, 0, 0, 0, 0, 0, 0,
+	// 0, 0.5, 0, 0, 0, 0, 0, 0,
+	// 0, 0, 0.5, 0, 0, 0, 0, 0,
+	// 0, 0, 0, 0.5, 0, 0, 0, 0,
+	// 0, 0, 0, 0, 0.5, 0, 0, 0,
+	// 0, 0, 0, 0, 0, 0.5, 0, 0,
+	// 0, 0, 0, 0, 0, 0, 0.5, 0,
+	// 0, 0, 0, 0, 0, 0, 0, 0.5;
 
-	R << 0.5, 0, 0, 0,
-	0, 0.5, 0, 0,
-	0, 0, 0.5, 0,
-	0, 0, 0, 0.5;
+	// R << 0.5, 0, 0, 0,
+	// 0, 0.5, 0, 0,
+	// 0, 0, 0.5, 0,
+	// 0, 0, 0, 0.5;
 
-	A << 0, 0, 0, 0, 1, 0, 0, 0,
-	0, 0, 0, 0, 0, 1, 0, 0,
-	0, 0, 0, 0, 0, 0, 1, 0,
-	0, 0, 0, 0, 0, 0, 0, 1,
-	0, 0, 0, 0, -A_z / mass, 0, 0, 0,
-	0, 0, 0, 0, 0, -A_r / I_xx, 0, 0,
-	0, 0, 0, 0, 0, 0, -A_r / I_yy, 0,
-	0, 0, 0, 0, 0, 0, 0, -A_r / I_zz;
+	// A << 0, 0, 0, 0, 1, 0, 0, 0,
+	// 0, 0, 0, 0, 0, 1, 0, 0,
+	// 0, 0, 0, 0, 0, 0, 1, 0,
+	// 0, 0, 0, 0, 0, 0, 0, 1,
+	// 0, 0, 0, 0, -A_z / mass, 0, 0, 0,
+	// 0, 0, 0, 0, 0, -A_r / I_xx, 0, 0,
+	// 0, 0, 0, 0, 0, 0, -A_r / I_yy, 0,
+	// 0, 0, 0, 0, 0, 0, 0, -A_r / I_zz;
 
-	B << 0, 0, 0, 0,
-	0, 0, 0, 0,
-	0, 0, 0, 0,
-	1/mass, 0, 0, 0,
-	0, 1/I_xx, 0, 0,
-	0, 0, 1/I_yy, 0,
-	0, 0, 0, 1/I_zz;
+	// B << 0, 0, 0, 0,
+	// 0, 0, 0, 0,
+	// 0, 0, 0, 0,
+	// 1/mass, 0, 0, 0,
+	// 0, 1/I_xx, 0, 0,
+	// 0, 0, 1/I_yy, 0,
+	// 0, 0, 0, 1/I_zz;
 
-	K.setZero();
-	K_iterative.setZero();
-	lqr.compute(Q, R, A, B, K);
-}
+	// K.setZero();
+	// K_iterative.setZero();
+	//lqr.compute(Q, R, A, B, K);
+//}
 
 Vector3f RateControl::lqrUpdate(const Vector3f &rate, const Vector3f &rate_sp)
 {
-	Eigen::Matrix<double, stateDim, 1> rate_error_extended = Eigen::Matrix<double, stateDim, 1>::Zero();
 	Vector3f rate_error = rate_sp - rate;
-
-	for (size_t i = 0; i < 3; ++i) {
-    		rate_error_extended(i) = rate_error(i); // Copy the first three elements
-	}
-
-	Eigen::Matrix<double, 3, 1> torque_temp = (-K * rate_error_extended).topRows<3>();
-	Vector3f torque(torque_temp(0), torque_temp(1), torque_temp(2));
+	Vector3f torque = (-K.emult(rate_error));
 	return torque;
 }
 

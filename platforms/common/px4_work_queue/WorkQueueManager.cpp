@@ -327,7 +327,10 @@ WorkQueueManagerRun(int, char **)
 				PX4_DEBUG("starting: %s, priority: %d, stack: %zu bytes", wq->name, param.sched_priority, stacksize);
 
 			} else {
+				PX4_ERR("Thread ID: %lu", (unsigned long)thread);
 				PX4_ERR("failed to create thread for %s (%i): %s", wq->name, ret_create, strerror(ret_create));
+				PX4_ERR("Error occurred at %s:%d", __FILE__, __LINE__);
+				PX4_ERR("Thread attributes: stack size = %zu, priority = %d", stacksize, param.sched_priority);
 			}
 
 			// destroy thread attributes
