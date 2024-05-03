@@ -51,9 +51,9 @@ set(MODEL_SDF_PATH "${PX4_SOURCE_DIR}/Tools/simulation/gz/models/x500_base/model
 add_definitions(-DMODEL_SDF_PATH="${MODEL_SDF_PATH}")
 
 # Apply -Wno-float-equal only if using GNU C++ or Clang compilers
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    target_compile_options(RateControl PRIVATE -Wno-float-equal)
-endif()
+# if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+#     target_compile_options(RateControl PRIVATE -Wno-float-equal)
+# endif()
 
 target_include_directories(RateControl PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}
@@ -67,11 +67,7 @@ else()
     message(STATUS "OpenMP not found")
 endif()
 
-include_directories(${EIGEN3_INCLUDE_DIR})
-
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    target_compile_options(RateControl PRIVATE -Wno-float-equal)
-endif()
+# include_directories(${EIGEN3_INCLUDE_DIR})
 
 target_link_libraries(RateControl PRIVATE mathlib)
 target_link_libraries(RateControl PRIVATE ct_optcon)
