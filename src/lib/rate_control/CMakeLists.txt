@@ -55,11 +55,11 @@ add_definitions(-DMODEL_SDF_PATH="${MODEL_SDF_PATH}")
 #     target_compile_options(RateControl PRIVATE -Wno-float-equal)
 # endif()
 
-target_include_directories(RateControl PUBLIC
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${CONTROL_TOOLBOX_PATH}/ct_core/include
-	${CONTROL_TOOLBOX_PATH}/ct_optcon/include
-)
+# target_include_directories(RateControl PUBLIC
+# 	${CMAKE_CURRENT_SOURCE_DIR}
+# 	${CONTROL_TOOLBOX_PATH}/ct_core/include
+# 	${CONTROL_TOOLBOX_PATH}/ct_optcon/include
+# )
 
 if(OpenMP_CXX_FOUND)
     target_link_libraries(RateControl PUBLIC OpenMP::OpenMP_CXX)
@@ -70,7 +70,7 @@ endif()
 # include_directories(${EIGEN3_INCLUDE_DIR})
 
 target_link_libraries(RateControl PRIVATE mathlib)
-target_link_libraries(RateControl PRIVATE ct_optcon)
+#target_link_libraries(RateControl PRIVATE ct_optcon)
 target_link_libraries(RateControl PRIVATE ${TINYXML2_LIBRARY})
 
 

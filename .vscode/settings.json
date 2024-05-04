@@ -144,5 +144,11 @@
         "python.analysis.extraPaths": [
                 "/opt/ros/humble/lib/python3.10/site-packages",
                 "/opt/ros/humble/local/lib/python3.10/dist-packages"
-        ]
+        ],
+        "editor.fontSize": 8,
+        "chat.editor.fontSize": 8,
+        "debug.console.fontSize": 8,
+        "scm.inputFontSize": 8,
+        "terminal.integrated.fontSize": 8,
+        "markdown.preview.fontSize": 8
 }

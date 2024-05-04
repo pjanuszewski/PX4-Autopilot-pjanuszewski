@@ -40,27 +40,30 @@
 #pragma once
 
 #include <tinyxml2.h>
-#include <control-toolbox/ct_optcon/include/ct/optcon/optcon.h>
+//#include <control-toolbox/ct_optcon/include/ct/optcon/optcon.h>
 #include <matrix/matrix/math.hpp>
 #include <iostream>
 #include <string>
 #include <Eigen/Dense>
+#include <vector>
 
 #include <mathlib/mathlib.h>
 #include <uORB/topics/rate_ctrl_status.h>
 
+
+Eigen::MatrixXd readMatrixFromFile(const std::string &filename);
 class RateControl
 {
 public:
-	RateControl();
+	RateControl() = default;
 	~RateControl() = default;
 
 
-	void setLqrMatrices();
-	bool computeLqr();
+	// void setLqrMatrices();
+	// bool computeLqr();
 
 	matrix::Vector3f lqrUpdate(const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp);
-
+	// Add this in rate_control.hpp or at the top of rate_control.cpp
 
 	/**
 	 * Set the rate control PID gains
@@ -135,13 +138,13 @@ public:
 	static constexpr float I_zz = 0.04f; // Inertia around the Z-axis
 	static constexpr float mass = 1.5f;  // Mass of the vehicle
 
-	ct::optcon::LQR<stateDim, controlDim> lqr;
+	// ct::optcon::LQR<stateDim, controlDim> lqr;
 
-	Eigen::Matrix<double, stateDim, stateDim> A;
-	Eigen::Matrix<double, stateDim, controlDim> B;
-	Eigen::Matrix<double, stateDim, stateDim> Q;
-	Eigen::Matrix<double, controlDim, controlDim> R;
-	Eigen::Matrix<double, controlDim, stateDim> K;
+	// Eigen::Matrix<double, stateDim, stateDim> A;
+	// Eigen::Matrix<double, stateDim, controlDim> B;
+	// Eigen::Matrix<double, stateDim, stateDim> Q;
+	// Eigen::Matrix<double, controlDim, controlDim> R;
+	// Eigen::Matrix<double, controlDim, stateDim> K;
 	matrix::Vector3f K_lqr;
 	/**
 	 * Get status message of controller for logging/debugging
