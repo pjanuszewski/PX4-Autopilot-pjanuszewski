@@ -68,6 +68,8 @@ MulticopterRateControl::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
+
+	_rate_control.setLqrGains();
 	return true;
 }
 

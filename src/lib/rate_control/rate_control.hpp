@@ -46,15 +46,15 @@
 #include <string>
 #include <Eigen/Dense>
 #include <vector>
+#include <fstream>
 
 #include <mathlib/mathlib.h>
 #include <uORB/topics/rate_ctrl_status.h>
 
-
-Eigen::MatrixXd readMatrixFromFile(const std::string &filename);
 class RateControl
 {
 public:
+
 	RateControl() = default;
 	~RateControl() = default;
 
@@ -63,6 +63,13 @@ public:
 	// bool computeLqr();
 
 	matrix::Vector3f lqrUpdate(const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp);
+	void setLqrGains();
+	void printWorkingDirectory();
+
+	static const size_t stateDim = 6;
+    	static const size_t controlDim = 3;
+	matrix::Matrix<float, controlDim, stateDim> readMatrixFromFile(const std::string &filename);
+
 	// Add this in rate_control.hpp or at the top of rate_control.cpp
 
 	/**
@@ -128,14 +135,12 @@ public:
 			_rate_int(axis) = 0.f;
 		}
 	}
-	static const size_t stateDim = 6;
-    	static const size_t controlDim = 4;
 
 	static constexpr float A_z = 0.1f;
 	static constexpr float A_r = 0.2f;
 	static constexpr float I_xx = 0.02f; // Inertia around the X-axis
 	static constexpr float I_yy = 0.02f; // Inertia around the Y-axis
-	static constexpr float I_zz = 0.04f; // Inertia around the Z-axis
+	static constexpr float I_zz = 0.04f; // Inertia around the Z-axisa
 	static constexpr float mass = 1.5f;  // Mass of the vehicle
 
 	// ct::optcon::LQR<stateDim, controlDim> lqr;

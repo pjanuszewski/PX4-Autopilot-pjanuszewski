@@ -140,55 +140,63 @@ Vector3f RateControl::update(const Vector3f &rate, const Vector3f &rate_sp, cons
 //    	K_lqr = {static_cast<float>(K(3,1)), static_cast<float>(K(4,2)), static_cast<float>(K(5,3))};
 // }
 
-Eigen::MatrixXd readMatrixFromFile(const std::string &filename)
+void printWorkingDir() {
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+        PX4_INFO("Current working dir: %s", cwd);
+    } else {
+        perror("getcwd() error");
+    }
+}
+
+matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim> RateControl::readMatrixFromFile(const std::string &filename)
 {
+    printWorkingDir();
     std::ifstream file(filename);
     if (!file.is_open()) {
-        throw std::runtime_error("Unable to open file");
+        throw std::runtime_error("Unable to open file: " + filename);
     }
 
+    std::vector<double> matrixEntries;
     std::string line;
-    std::vector<float> matrixEntries;
-    int cols = 0;
 
-    // Skip the header line
-    std::getline(file, line);
-
-    // Read the first line of matrix data to determine the number of columns
-    if (std::getline(file, line)) {
+    // Read each line from the file
+    while (getline(file, line)) {
         std::istringstream iss(line);
         double num;
         while (iss >> num) {
             matrixEntries.push_back(num);
-            cols++;
+            // Skip the tab
+            iss.ignore(1);
         }
     }
 
-    // Read the remaining lines of the matrix
-    while (std::getline(file, line)) {
-        std::istringstream iss(line);
-        double num;
-        while (iss >> num) {
-            matrixEntries.push_back(num);
-        }
+    // Check if the number of entries matches the expected size of 4x6 = 24
+    if (matrixEntries.size() != 18) {
+        throw std::runtime_error("Matrix data in file does not match expected size of 3x6");
     }
 
-    int rows = matrixEntries.size() / cols;
-    Eigen::MatrixXd matrix(rows, cols);
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-            matrix(i, j) = matrixEntries[i * cols + j];
+    matrix::Matrix<float, controlDim, stateDim> matrix;
+    for (size_t i = 0; i < controlDim; ++i) {
+        for (size_t j = 0; j < stateDim; ++j) {
+            matrix(i, j) = static_cast<float>(matrixEntries[i * 6 + j]);
         }
     }
 
     return matrix;
 }
 
+void RateControl::setLqrGains()
+{
+    matrix::Matrix<float, controlDim, stateDim> K = this->readMatrixFromFile("/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_value.txt");
+    // Since the matrix is always 4x6, there's no need to check if it's "large enough"
+    K_lqr = {K(0, 3), K(1, 4), K(2, 5)};
+}
+
+
 Vector3f RateControl::lqrUpdate(const Vector3f &rate, const Vector3f &rate_sp)
 {
 	Vector3f rate_error = rate_sp - rate;
-	Eigen::MatrixXd K = readMatrixFromFile("./K_value.txt");
-	K_lqr = {static_cast<float>(K(0, 0)), static_cast<float>(K(1, 1)), static_cast<float>(K(2, 2))};
 	Vector3f torque = -K_lqr.emult(rate_error);
 	return torque;
 }
