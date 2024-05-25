@@ -66,9 +66,10 @@ public:
 	void setLqrGains();
 	void printWorkingDirectory();
 
-	static const size_t stateDim = 6;
-    	static const size_t controlDim = 3;
+	static const size_t stateDim = 12;
+    	static const size_t controlDim = 4;
 	matrix::Matrix<float, controlDim, stateDim> readMatrixFromFile(const std::string &filename);
+	std::vector<matrix::Matrix<float, controlDim, stateDim>> readMatricesFromFile(const std::string &filename);
 
 	// Add this in rate_control.hpp or at the top of rate_control.cpp
 
@@ -157,6 +158,12 @@ public:
 	 */
 	void getRateControlStatus(rate_ctrl_status_s &rate_ctrl_status);
 
+	enum class LqrMode {
+	Hover,
+	Trajectory,
+	Invalid
+	};
+
 private:
 	void updateIntegral(matrix::Vector3f &rate_error, const float dt);
 
@@ -173,6 +180,11 @@ private:
 	// Feedback from control allocation
 	matrix::Vector<bool, 3> _control_allocator_saturation_negative;
 	matrix::Vector<bool, 3> _control_allocator_saturation_positive;
+
+	const std::string K_value_file_path = "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_value.csv";
+	const std::string K_matrices_file_path = "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_matrices.csv";
+
+	const std::string lqr_mode = "about_trajectory";
 
 	//LQR variables
 

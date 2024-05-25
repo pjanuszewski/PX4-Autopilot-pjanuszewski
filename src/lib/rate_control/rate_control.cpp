@@ -186,19 +186,87 @@ matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim> RateContro
     return matrix;
 }
 
-void RateControl::setLqrGains()
+std::vector<matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim>> RateControl::readMatricesFromFile(const std::string &filename)
 {
-    matrix::Matrix<float, controlDim, stateDim> K = this->readMatrixFromFile("/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_value.txt");
-    // Since the matrix is always 4x6, there's no need to check if it's "large enough"
-    K_lqr = {K(0, 3), K(1, 4), K(2, 5)};
+    printWorkingDir();
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Unable to open file: " + filename);
+    }
+
+    std::vector<double> matrixEntries;
+    std::string line;
+
+    // Read each line from the file
+    while (getline(file, line)) {
+        std::istringstream iss(line);
+        double num;
+        while (iss >> num) {
+            matrixEntries.push_back(num);
+            // Skip the tab or comma
+            iss.ignore(1);
+        }
+    }
+
+    // Check if the number of entries matches the expected size of multiple matrices
+    size_t expectedSize = controlDim * stateDim;
+    if (matrixEntries.size() % expectedSize != 0) {
+        throw std::runtime_error("Matrix data in file does not match expected size of multiple matrices");
+    }
+
+    size_t numMatrices = matrixEntries.size() / expectedSize;
+    std::vector<matrix::Matrix<float, controlDim, stateDim>> matrices(numMatrices);
+
+    for (size_t k = 0; k < numMatrices; ++k) {
+        matrix::Matrix<float, controlDim, stateDim> matrix;
+        for (size_t i = 0; i < controlDim; ++i) {
+            for (size_t j = 0; j < stateDim; ++j) {
+                matrix(i, j) = static_cast<float>(matrixEntries[k * expectedSize + i * stateDim + j]);
+            }
+        }
+        matrices[k] = matrix;
+    }
+
+    return matrices;
 }
 
-
-Vector3f RateControl::lqrUpdate(const Vector3f &rate, const Vector3f &rate_sp)
+void RateControl::setLqrGains(const std::string &lqr_mode)
 {
-	Vector3f rate_error = rate_sp - rate;
-	Vector3f torque = -K_lqr.emult(rate_error);
-	return torque;
+    if (lqr_mode == "about_hover") {
+        current_mode = LqrMode::Hover;
+        // Load matrices only if they are not already loaded or if they have changed
+        if (_K_matrices.empty()) {
+            _K_matrices = this->readMatricesFromFile("K_value_file_path");
+        }
+        K_lqr = {_K_matrices.front()(1, 9), _K_matrices.front()(2, 10), _K_matrices.front()(3, 11)};
+    }
+    else if (lqr_mode == "about_trajectory") {
+        current_mode = LqrMode::Trajectory;
+        // Similar loading logic as above
+    }
+    else {
+        throw std::runtime_error("Invalid LQR mode");
+    }
+}
+
+void RateControl::updateKMatrix(const hrt_abstime &current_time) {
+    const hrt_abstime elapsed_time = current_time - _start_time;
+    size_t new_index = elapsed_time / 8000;
+    if (new_index >= _K_matrices.size()) {
+        new_index = _K_matrices.size() - 1;
+    }
+    if (new_index != _current_K_index) {
+        _current_K_index = new_index;
+        K_lqr = {_K_matrices[_current_K_index](1, 9), _K_matrices[_current_K_index](2, 10), _K_matrices[_current_K_index](3, 11)};
+    }
+}
+
+Vector3f RateControl::lqrUpdate(const Vector3f &rate, const Vector3f &rate_sp, const hrt_abstime current_time) {
+    if (current_mode == LqrMode::Hover) {
+        updateKMatrix(current_time);
+    }
+    Vector3f rate_error = rate_sp - rate;
+    return -K_lqr.emult(rate_error);
 }
 
 void RateControl::updateIntegral(Vector3f &rate_error, const float dt)

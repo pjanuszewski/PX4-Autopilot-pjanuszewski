@@ -69,7 +69,7 @@ MulticopterRateControl::init()
 		return false;
 	}
 
-	_rate_control.setLqrGains();
+	_rate_control.setLqrGains("about_hover");
 	return true;
 }
 
