@@ -47,6 +47,7 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <fstream>
+#include <drivers/drv_hrt.h>
 
 #include <mathlib/mathlib.h>
 #include <uORB/topics/rate_ctrl_status.h>
@@ -62,13 +63,16 @@ public:
 	// void setLqrMatrices();
 	// bool computeLqr();
 
-	matrix::Vector3f lqrUpdate(const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp);
-	void setLqrGains();
+	matrix::Vector3f lqrUpdate(const matrix::Vector3f &position, const matrix::Vector3f &position_sp,
+				    const matrix::Vector3f &velocity, const matrix::Vector3f &velocity_sp,
+				    const matrix::Vector3f &euler, const matrix::Vector3f &angles_sp,
+				    const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp,
+				    const matrix::Vector3f &angular_accel, const hrt_abstime &current_time);
+	void setLqrGains(const std::string &mode);
 	void printWorkingDirectory();
 
 	static const size_t stateDim = 12;
     	static const size_t controlDim = 4;
-	matrix::Matrix<float, controlDim, stateDim> readMatrixFromFile(const std::string &filename);
 	std::vector<matrix::Matrix<float, controlDim, stateDim>> readMatricesFromFile(const std::string &filename);
 
 	// Add this in rate_control.hpp or at the top of rate_control.cpp
@@ -157,12 +161,23 @@ public:
 	 * @param rate_ctrl_status status message to fill with internal states
 	 */
 	void getRateControlStatus(rate_ctrl_status_s &rate_ctrl_status);
+	matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim> readMatrixFromFile(const std::string &filename);
+
+	void updateKMatrix(const hrt_abstime &current_time_us);
 
 	enum class LqrMode {
 	Hover,
 	Trajectory,
 	Invalid
 	};
+
+	void updateMissionStartTime() {
+           mission_start_time = hrt_absolute_time();
+	}
+
+	static void mavlink_quaternion_to_dcm(const float quaternion[4], float dcm[3][3]);
+	static void mavlink_dcm_to_euler(const float dcm[3][3], float* roll, float* pitch, float* yaw);
+	static void mavlink_quaternion_to_euler(const float quaternion[4], float* roll, float* pitch, float* yaw);
 
 private:
 	void updateIntegral(matrix::Vector3f &rate_error, const float dt);
@@ -181,14 +196,19 @@ private:
 	matrix::Vector<bool, 3> _control_allocator_saturation_negative;
 	matrix::Vector<bool, 3> _control_allocator_saturation_positive;
 
-	const std::string K_value_file_path = "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_value.csv";
-	const std::string K_matrices_file_path = "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_matrices.csv";
+	std::string K_value_file_path = "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_value.csv";
+	std::string K_matrices_file_path = "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_matrices.csv";
 
-	const std::string lqr_mode = "about_trajectory";
+	std::vector<matrix::Matrix<float, controlDim, stateDim>> K_matrices;
+	hrt_abstime mission_start_time;
+
+	LqrMode current_mode;
 
 	//LQR variables
 
-
+	matrix::Matrix<float, controlDim, stateDim> K_matrix;
 	//ct::optcon::LQR<stateDim, controlDim>::control_feedback_t K_iterative;
-	//matrix::Vector3f K = matrix::Vector3f(0.83923, 0.83923, 0.858301);
+	matrix::Vector3f K = matrix::Vector3f(0.83923, 0.83923, 0.858301);
+	matrix::Vector3f K_hover = matrix::Vector3f(0.9726599304, 0.9726599304, 0.9904326023);
+	matrix::Vector3f K_trajectory = matrix::Vector3f(0.9726599304, 0.9726599304, 0.9904326023);
 };

@@ -68,7 +68,7 @@ MulticopterRateControl::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
-
+	_rate_control.updateMissionStartTime();
 	_rate_control.setLqrGains("about_hover");
 	return true;
 }
@@ -130,8 +130,42 @@ MulticopterRateControl::Run()
 		const float dt = math::constrain(((now - _last_run) * 1e-6f), 0.000125f, 0.02f);
 		_last_run = now;
 
+		vehicle_local_position_setpoint_s local_pos_sp;
+		if (_local_pos_sp_sub.update(&local_pos_sp)) {
+		// Use local_pos_sp for control calculations
+		}
+
+		vehicle_attitude_setpoint_s attitude_sp;
+		if (_attitude_sp_sub.update(&attitude_sp)) {
+		// Use attitude_sp for control calculations
+		}
+
+		vehicle_local_position_s local_pos;
+		if (_local_pos_sub.update(&local_pos)) {
+		// Use local_pos for control calculations
+		}
+
+		vehicle_attitude_s attitude;
+		if (_attitude_sub.update(&attitude)) {
+		// Use attitude for control calculations
+		}
+
 		const Vector3f rates{angular_velocity.xyz};
 		const Vector3f angular_accel{angular_velocity.xyz_derivative};
+		const Vector4f angles{attitude.q[0], attitude.q[1], attitude.q[2], attitude.q[3]};
+		float roll, pitch, yaw;
+		const float quaternion[4] = {attitude.q[0], attitude.q[1], attitude.q[2], attitude.q[3]};
+
+		// Manually pass each element of the quaternion if no data() method is available.
+		_rate_control.mavlink_quaternion_to_euler(quaternion, &roll, &pitch, &yaw);
+
+		Vector3f euler(roll, pitch, yaw);
+		const Vector3f angles_sp = Vector3f(attitude_sp.roll_body, attitude_sp.pitch_body, attitude_sp.yaw_body);
+		const Vector3f position{local_pos.x, local_pos.y, local_pos.z};
+		const Vector3f velocity{local_pos.vx, local_pos.vy, local_pos.vz};
+		const Vector3f position_sp{local_pos_sp.x, local_pos_sp.y, local_pos_sp.z};
+		const Vector3f velocity_sp{local_pos_sp.vx, local_pos_sp.vy, local_pos_sp.vz};
+
 
 		/* check for updates in other topics */
 		_vehicle_control_mode_sub.update(&_vehicle_control_mode);
@@ -216,9 +250,11 @@ MulticopterRateControl::Run()
 
 			// run rate controller
 
-			const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
+			//const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
 
-			// const Vector3f att_control = _rate_control.lqrUpdate(rates, _rates_setpoint);
+			const Vector3f att_control = _rate_control.lqrUpdate(position, position_sp, velocity, velocity_sp, euler, angles_sp, rates, _rates_setpoint, angular_accel, hrt_absolute_time());
+
+			//const Vector3f att_control = _rate_control.lqrUpdate(rates, _rates_setpoint, hrt_absolute_time());
 
 
 			// publish rate controller status

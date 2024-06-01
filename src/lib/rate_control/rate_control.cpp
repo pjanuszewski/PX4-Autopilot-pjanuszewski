@@ -97,6 +97,113 @@ Vector3f RateControl::update(const Vector3f &rate, const Vector3f &rate_sp, cons
 	return torque;
 }
 
+// Vector3f RateControl::lqrUpdate(const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp, const hrt_abstime &current_time) {
+//     // if (current_mode == LqrMode::Trajectory) {vehicle_torque_setpoint
+//     //     updateKMatrix(current_time);
+//     // }
+//     Vector3f rate_error = rate_sp - rate;
+//     const Vector3f torque = -K.emult(rate_error);
+//     return torque;
+// }
+
+Vector3f RateControl::lqrUpdate(const Vector3f &position, const Vector3f &position_sp,
+                                const Vector3f &velocity, const Vector3f &velocity_sp,
+                                const Vector3f &euler, const Vector3f &angles_sp,
+                                const Vector3f &rate, const Vector3f &rate_sp,
+                                const Vector3f &angular_accel, const hrt_abstime &current_time) {
+
+    // Calculate state error
+    Vector3f position_error = position_sp - position;
+    Vector3f velocity_error = velocity_sp - velocity;
+    Vector3f attitude_error = angles_sp - euler; // Simplified, consider proper angular error calculation
+    Vector3f rate_error = rate_sp - rate;
+
+    // Combine errors into a state error vector (simplified example)
+    matrix::Vector<float, 12> state_error;
+    K_matrix.setZero();
+    state_error.setZero();
+    state_error(0) = position_error(0);
+    state_error(1) = position_error(1);
+    state_error(2) = position_error(2);
+    state_error(3) = velocity_error(0);
+    state_error(4) = velocity_error(1);
+    state_error(5) = velocity_error(2);
+    state_error(6) = attitude_error(0);
+    state_error(7) = attitude_error(1);
+    state_error(8) = attitude_error(2);
+    state_error(9) = rate_error(0);
+    state_error(10) = rate_error(1);
+    state_error(11) = rate_error(2);
+
+    Vector4f result = K_matrix * state_error;  // Assuming K is defined such that this multiplication is valid
+    Vector3f torque(result(1), result(2), result(3));  // Extracting the first three elements
+
+    return torque;
+}
+
+void RateControl::mavlink_quaternion_to_dcm(const float quaternion[4], float dcm[3][3])
+{
+    double a = (double)quaternion[0];
+    double b = (double)quaternion[1];
+    double c = (double)quaternion[2];
+    double d = (double)quaternion[3];
+    double aSq = a * a;
+    double bSq = b * b;
+    double cSq = c * c;
+    double dSq = d * d;
+    dcm[0][0] = aSq + bSq - cSq - dSq;
+    dcm[0][1] = 2 * (b * c - a * d);
+    dcm[0][2] = 2 * (a * c + b * d);
+    dcm[1][0] = 2 * (b * c + a * d);
+    dcm[1][1] = aSq - bSq + cSq - dSq;
+    dcm[1][2] = 2 * (c * d - a * b);
+    dcm[2][0] = 2 * (b * d - a * c);
+    dcm[2][1] = 2 * (a * b + c * d);
+    dcm[2][2] = aSq - bSq - cSq + dSq;
+}
+
+void RateControl::mavlink_dcm_to_euler(const float dcm[3][3], float* roll, float* pitch, float* yaw)
+{
+    float phi, theta, psi;
+    theta = asinf(-dcm[2][0]);
+
+    if (fabsf(theta - (float)M_PI_2) < 1.0e-3f) {
+        phi = 0.0f;
+        psi = (atan2f(dcm[1][2] - dcm[0][1],
+                dcm[0][2] + dcm[1][1]) + phi);
+
+    } else if (fabsf(theta + (float)M_PI_2) < 1.0e-3f) {
+        phi = 0.0f;
+        psi = atan2f(dcm[1][2] - dcm[0][1],
+                  dcm[0][2] + dcm[1][1] - phi);
+
+    } else {
+        phi = atan2f(dcm[2][1], dcm[2][2]);
+        psi = atan2f(dcm[1][0], dcm[0][0]);
+    }
+
+    *roll = phi;
+    *pitch = theta;
+    *yaw = psi;
+}
+
+
+/**
+ * Converts a quaternion to euler angles
+ *
+ * @param quaternion a [w, x, y, z] ordered quaternion (null-rotation being 1 0 0 0)
+ * @param roll the roll angle in radians
+ * @param pitch the pitch angle in radians
+ * @param yaw the yaw angle in radians
+ */
+
+void RateControl::mavlink_quaternion_to_euler(const float quaternion[4], float* roll, float* pitch, float* yaw)
+{
+    float dcm[3][3];
+    mavlink_quaternion_to_dcm(quaternion, dcm);
+    mavlink_dcm_to_euler((const float(*)[3])dcm, roll, pitch, yaw);
+}
+
 // void RateControl::setLqrMatrices()
 // {
 // 	A << 0, 0, 0, 1, 0, 0,
@@ -149,49 +256,19 @@ void printWorkingDir() {
     }
 }
 
-matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim> RateControl::readMatrixFromFile(const std::string &filename)
-{
-    printWorkingDir();
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        throw std::runtime_error("Unable to open file: " + filename);
-    }
-
-    std::vector<double> matrixEntries;
-    std::string line;
-
-    // Read each line from the file
-    while (getline(file, line)) {
-        std::istringstream iss(line);
-        double num;
-        while (iss >> num) {
-            matrixEntries.push_back(num);
-            // Skip the tab
-            iss.ignore(1);
-        }
-    }
-
-    // Check if the number of entries matches the expected size of 4x6 = 24
-    if (matrixEntries.size() != 18) {
-        throw std::runtime_error("Matrix data in file does not match expected size of 3x6");
-    }
-
-    matrix::Matrix<float, controlDim, stateDim> matrix;
-    for (size_t i = 0; i < controlDim; ++i) {
-        for (size_t j = 0; j < stateDim; ++j) {
-            matrix(i, j) = static_cast<float>(matrixEntries[i * 6 + j]);
-        }
-    }
-
-    return matrix;
-}
-
 std::vector<matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim>> RateControl::readMatricesFromFile(const std::string &filename)
 {
     printWorkingDir();
     std::ifstream file(filename);
     if (!file.is_open()) {
-        throw std::runtime_error("Unable to open file: " + filename);
+        // Use errno and strerror to get a string explaining why the file could not be opened
+	std::string error_message = "Unable to open file: " + filename;
+	error_message += "\nError: " + std::string(std::strerror(errno));
+
+        // Optionally, include additional details such as the current user or file permissions
+        error_message += "\nCheck if the file exists, the path is correct, and the permissions are adequate.";
+
+        throw std::runtime_error(error_message);
     }
 
     std::vector<double> matrixEntries;
@@ -230,19 +307,55 @@ std::vector<matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim
     return matrices;
 }
 
+matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim> RateControl::readMatrixFromFile(const std::string &filename)
+{
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::string error_message = "Unable to open file: " + filename;
+        error_message += "\nError: " + std::string(std::strerror(errno));
+        throw std::runtime_error(error_message);
+    }
+
+    std::vector<float> matrixEntries;
+    std::string line;
+
+    // Read each line from the file
+    while (getline(file, line)) {
+        std::istringstream iss(line);
+        float num;
+        while (iss >> num) {
+            matrixEntries.push_back(num);
+            // Skip the tab or comma
+            iss.ignore(1);
+        }
+    }
+
+    // Check if the number of entries matches the expected size of the matrix
+    size_t expectedSize = RateControl::controlDim * RateControl::stateDim;
+    if (matrixEntries.size() != expectedSize) {
+        throw std::runtime_error("Matrix data in file does not match expected size");
+    }
+
+    matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim> matrix;
+    for (size_t i = 0; i < RateControl::controlDim; ++i) {
+        for (size_t j = 0; j < RateControl::stateDim; ++j) {
+            matrix(i, j) = matrixEntries[i * RateControl::stateDim + j];
+        }
+    }
+
+    return matrix;
+}
+
 void RateControl::setLqrGains(const std::string &lqr_mode)
 {
     if (lqr_mode == "about_hover") {
         current_mode = LqrMode::Hover;
-        // Load matrices only if they are not already loaded or if they have changed
-        if (_K_matrices.empty()) {
-            _K_matrices = this->readMatricesFromFile("K_value_file_path");
-        }
-        K_lqr = {_K_matrices.front()(1, 9), _K_matrices.front()(2, 10), _K_matrices.front()(3, 11)};
+        K_matrix = this->readMatrixFromFile("/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_value.csv");
     }
     else if (lqr_mode == "about_trajectory") {
         current_mode = LqrMode::Trajectory;
-        // Similar loading logic as above
+        K_matrices = this->readMatricesFromFile("/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_matrices.csv");
+        K_lqr = {K_matrices[0](1, 9), K_matrices[0](2, 10), K_matrices[0](3, 11)};
     }
     else {
         throw std::runtime_error("Invalid LQR mode");
@@ -250,23 +363,16 @@ void RateControl::setLqrGains(const std::string &lqr_mode)
 }
 
 void RateControl::updateKMatrix(const hrt_abstime &current_time) {
-    const hrt_abstime elapsed_time = current_time - _start_time;
+    const hrt_abstime elapsed_time = current_time - mission_start_time;
+    uint16_t _current_K_index = 0;
     size_t new_index = elapsed_time / 8000;
-    if (new_index >= _K_matrices.size()) {
-        new_index = _K_matrices.size() - 1;
+    if (new_index >= K_matrices.size()) {
+        new_index = K_matrices.size() - 1;
     }
     if (new_index != _current_K_index) {
         _current_K_index = new_index;
-        K_lqr = {_K_matrices[_current_K_index](1, 9), _K_matrices[_current_K_index](2, 10), _K_matrices[_current_K_index](3, 11)};
+        K_lqr = {K_matrices[_current_K_index](1, 9), K_matrices[_current_K_index](2, 10), K_matrices[_current_K_index](3, 11)};
     }
-}
-
-Vector3f RateControl::lqrUpdate(const Vector3f &rate, const Vector3f &rate_sp, const hrt_abstime current_time) {
-    if (current_mode == LqrMode::Hover) {
-        updateKMatrix(current_time);
-    }
-    Vector3f rate_error = rate_sp - rate;
-    return -K_lqr.emult(rate_error);
 }
 
 void RateControl::updateIntegral(Vector3f &rate_error, const float dt)
