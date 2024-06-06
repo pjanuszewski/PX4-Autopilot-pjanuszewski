@@ -65,13 +65,15 @@ public:
 
 	matrix::Vector3f lqrUpdate(const matrix::Vector3f &position, const matrix::Vector3f &position_sp,
 				    const matrix::Vector3f &velocity, const matrix::Vector3f &velocity_sp,
-				    const matrix::Vector3f &euler, const matrix::Vector3f &angles_sp,
+				    const float (&quaternion1)[4], const float (&quaternion_sp)[4],
 				    const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp,
 				    const matrix::Vector3f &angular_accel, const hrt_abstime &current_time);
 	void setLqrGains(const std::string &mode);
 	void printWorkingDirectory();
 
-	static const size_t stateDim = 12;
+	float quaternion_multiply(const float (&quaternion1)[4], const float (&quaternion2)[4]);
+
+	static const size_t stateDim = 8;
     	static const size_t controlDim = 4;
 	std::vector<matrix::Matrix<float, controlDim, stateDim>> readMatricesFromFile(const std::string &filename);
 
@@ -165,6 +167,8 @@ public:
 
 	void updateKMatrix(const hrt_abstime &current_time_us);
 
+	void quaternion_multiply(const float (&q1)[4], const float (&q2)[4], float (&q)[4]);
+
 	enum class LqrMode {
 	Hover,
 	Trajectory,
@@ -174,6 +178,8 @@ public:
 	void updateMissionStartTime() {
            mission_start_time = hrt_absolute_time();
 	}
+
+	Eigen::Quaterniond quaternionDifference(const Eigen::Quaterniond& q1, const Eigen::Quaterniond& q2);
 
 	static void mavlink_quaternion_to_dcm(const float quaternion[4], float dcm[3][3]);
 	static void mavlink_dcm_to_euler(const float dcm[3][3], float* roll, float* pitch, float* yaw);

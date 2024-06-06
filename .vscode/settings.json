@@ -149,6 +149,6 @@
         "chat.editor.fontSize": 8,
         "debug.console.fontSize": 8,
         "scm.inputFontSize": 8,
-        "terminal.integrated.fontSize": 8,
+        "terminal.integrated.fontSize": 13,
         "markdown.preview.fontSize": 8
 }

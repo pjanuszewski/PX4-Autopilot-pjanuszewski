@@ -106,37 +106,66 @@ Vector3f RateControl::update(const Vector3f &rate, const Vector3f &rate_sp, cons
 //     return torque;
 // }
 
+Eigen::Quaterniond quaternionDifference(const Eigen::Quaterniond& q1, const Eigen::Quaterniond& q2) {
+    Eigen::Quaterniond q1_inv = q1.conjugate();  // Using conjugate for inverse since the quaternion is normalized
+    return q2 * q1_inv;
+}
+
+void RateControl::quaternion_multiply(const float (&q1)[4], const float (&q2)[4], float (&q)[4]){
+    q[0] = q1[0] * q2[0] - q1[1] * q2[1] - q1[2] * q2[2] - q1[3] * q2[3];
+    q[1] = q1[0] * q2[1] + q1[1] * q2[0] + q1[2] * q2[3] - q1[3] * q2[2];
+    q[2] = q1[0] * q2[2] - q1[1] * q2[3] + q1[2] * q2[0] + q1[3] * q2[1];
+    q[3] = q1[0] * q2[3] + q1[1] * q2[2] - q1[2] * q2[1] + q1[3] * q2[0];
+}
+
 Vector3f RateControl::lqrUpdate(const Vector3f &position, const Vector3f &position_sp,
                                 const Vector3f &velocity, const Vector3f &velocity_sp,
-                                const Vector3f &euler, const Vector3f &angles_sp,
+                                const float (&quaternion1)[4], const float (&quaternion_sp)[4],
                                 const Vector3f &rate, const Vector3f &rate_sp,
                                 const Vector3f &angular_accel, const hrt_abstime &current_time) {
 
-    // Calculate state error
+    // Calculate position and velocity errors
     Vector3f position_error = position_sp - position;
     Vector3f velocity_error = velocity_sp - velocity;
-    Vector3f attitude_error = angles_sp - euler; // Simplified, consider proper angular error calculation
+
+    // Attitude error
+    const float quaternion1_conjugated[4] = {quaternion1[0], -quaternion1[1], -quaternion1[2], -quaternion1[3]};
+    float quaternion_error[4];
+    quaternion_multiply(quaternion_sp, quaternion1_conjugated, quaternion_error);
+    float roll, pitch, yaw;
+    mavlink_quaternion_to_euler(quaternion_error, &roll, &pitch, &yaw);
+    Vector3f attitude_error = Vector3f(roll, pitch, yaw);
+
+    // Rate error
     Vector3f rate_error = rate_sp - rate;
 
     // Combine errors into a state error vector (simplified example)
-    matrix::Vector<float, 12> state_error;
-    K_matrix.setZero();
+    matrix::Vector<float, 8> state_error;
     state_error.setZero();
-    state_error(0) = position_error(0);
-    state_error(1) = position_error(1);
-    state_error(2) = position_error(2);
-    state_error(3) = velocity_error(0);
-    state_error(4) = velocity_error(1);
-    state_error(5) = velocity_error(2);
-    state_error(6) = attitude_error(0);
-    state_error(7) = attitude_error(1);
-    state_error(8) = attitude_error(2);
-    state_error(9) = rate_error(0);
-    state_error(10) = rate_error(1);
-    state_error(11) = rate_error(2);
+    // state_error(0) = position_error(0);
+    // state_error(1) = position_error(1);
+    // state_error(2) = position_error(2);
+    // state_error(3) = velocity_error(0);
+    // state_error(4) = velocity_error(1);
+    // state_error(5) = velocity_error(2);
+    // state_error(6) = attitude_error(0);
+    // state_error(7) = attitude_error(1);
+    // state_error(8) = attitude_error(2);
+    // state_error(9) = rate_error(0);
+    // state_error(10) = rate_error(1);
+    // state_error(11) = rate_error(2);
 
-    Vector4f result = K_matrix * state_error;  // Assuming K is defined such that this multiplication is valid
-    Vector3f torque(result(1), result(2), result(3));  // Extracting the first three elements
+    state_error(0) = position_error(2);
+    state_error(1) = attitude_error(0);
+    state_error(2) = attitude_error(1);
+    state_error(3) = attitude_error(2);
+    state_error(4) = velocity_error(2);
+    state_error(5) = rate_error(0);
+    state_error(6) = rate_error(1);
+    state_error(7) = rate_error(2);
+
+    const Vector4f result = -K_matrix * state_error;  // Assuming K is defined such that this multiplication is valid
+    const Vector3f torque(result(1), result(2), result(3));  // Extracting the first three elements
 
     return torque;
 }

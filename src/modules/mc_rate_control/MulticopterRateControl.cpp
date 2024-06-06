@@ -152,15 +152,8 @@ MulticopterRateControl::Run()
 
 		const Vector3f rates{angular_velocity.xyz};
 		const Vector3f angular_accel{angular_velocity.xyz_derivative};
-		const Vector4f angles{attitude.q[0], attitude.q[1], attitude.q[2], attitude.q[3]};
-		float roll, pitch, yaw;
 		const float quaternion[4] = {attitude.q[0], attitude.q[1], attitude.q[2], attitude.q[3]};
-
-		// Manually pass each element of the quaternion if no data() method is available.
-		_rate_control.mavlink_quaternion_to_euler(quaternion, &roll, &pitch, &yaw);
-
-		Vector3f euler(roll, pitch, yaw);
-		const Vector3f angles_sp = Vector3f(attitude_sp.roll_body, attitude_sp.pitch_body, attitude_sp.yaw_body);
+		const float quaternion_sp[4] = {attitude_sp.q_d[0], attitude_sp.q_d[1], attitude_sp.q_d[2], attitude_sp.q_d[3]};
 		const Vector3f position{local_pos.x, local_pos.y, local_pos.z};
 		const Vector3f velocity{local_pos.vx, local_pos.vy, local_pos.vz};
 		const Vector3f position_sp{local_pos_sp.x, local_pos_sp.y, local_pos_sp.z};
@@ -252,7 +245,7 @@ MulticopterRateControl::Run()
 
 			//const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
 
-			const Vector3f att_control = _rate_control.lqrUpdate(position, position_sp, velocity, velocity_sp, euler, angles_sp, rates, _rates_setpoint, angular_accel, hrt_absolute_time());
+			const Vector3f att_control = _rate_control.lqrUpdate(position, position_sp, velocity, velocity_sp, quaternion, quaternion_sp, rates, _rates_setpoint, angular_accel, hrt_absolute_time());
 
 			//const Vector3f att_control = _rate_control.lqrUpdate(rates, _rates_setpoint, hrt_absolute_time());
 
