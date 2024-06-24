@@ -69,7 +69,7 @@ MulticopterRateControl::init()
 		return false;
 	}
 	_rate_control.updateMissionStartTime();
-	_rate_control.setLqrGains("about_hover");
+	// _rate_control.setLqrGains("about_hover");
 	return true;
 }
 
@@ -152,12 +152,12 @@ MulticopterRateControl::Run()
 
 		const Vector3f rates{angular_velocity.xyz};
 		const Vector3f angular_accel{angular_velocity.xyz_derivative};
-		const float quaternion[4] = {attitude.q[0], attitude.q[1], attitude.q[2], attitude.q[3]};
-		const float quaternion_sp[4] = {attitude_sp.q_d[0], attitude_sp.q_d[1], attitude_sp.q_d[2], attitude_sp.q_d[3]};
-		const Vector3f position{local_pos.x, local_pos.y, local_pos.z};
-		const Vector3f velocity{local_pos.vx, local_pos.vy, local_pos.vz};
-		const Vector3f position_sp{local_pos_sp.x, local_pos_sp.y, local_pos_sp.z};
-		const Vector3f velocity_sp{local_pos_sp.vx, local_pos_sp.vy, local_pos_sp.vz};
+		// const float quaternion[4] = {attitude.q[0], attitude.q[1], attitude.q[2], attitude.q[3]};
+		// const float quaternion_sp[4] = {attitude_sp.q_d[0], attitude_sp.q_d[1], attitude_sp.q_d[2], attitude_sp.q_d[3]};
+		// const Vector3f position{local_pos.x, local_pos.y, local_pos.z};
+		// const Vector3f velocity{local_pos.vx, local_pos.vy, local_pos.vz};
+		// const Vector3f position_sp{local_pos_sp.x, local_pos_sp.y, local_pos_sp.z};
+		// const Vector3f velocity_sp{local_pos_sp.vx, local_pos_sp.vy, local_pos_sp.vz};
 
 
 		/* check for updates in other topics */
@@ -243,9 +243,9 @@ MulticopterRateControl::Run()
 
 			// run rate controller
 
-			//const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
+			const Vector3f att_control = _rate_control.update(rates, _rates_setpoint, angular_accel, dt, _maybe_landed || _landed);
 
-			const Vector3f att_control = _rate_control.lqrUpdate(position, position_sp, velocity, velocity_sp, quaternion, quaternion_sp, rates, _rates_setpoint, angular_accel, hrt_absolute_time());
+			//const Vector3f att_control = _rate_control.lqrUpdate(position, position_sp, velocity, velocity_sp, quaternion, quaternion_sp, rates, _rates_setpoint, angular_accel, hrt_absolute_time());
 
 			//const Vector3f att_control = _rate_control.lqrUpdate(rates, _rates_setpoint, hrt_absolute_time());
 

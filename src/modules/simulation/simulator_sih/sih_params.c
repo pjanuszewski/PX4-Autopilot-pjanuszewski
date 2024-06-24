@@ -229,7 +229,7 @@ PARAM_DEFINE_FLOAT(SIH_KDV, 1.0f);
  * @increment 0.005
  * @group Simulation In Hardware
  */
-PARAM_DEFINE_FLOAT(SIH_KDW, 0.025f);
+PARAM_DEFINE_FLOAT(SIH_KDW, 473977390.0f);
 
 /**
  * Initial geodetic latitude
@@ -245,7 +245,7 @@ PARAM_DEFINE_FLOAT(SIH_KDW, 0.025f);
  * @max  850000000
  * @group Simulation In Hardware
  */
-PARAM_DEFINE_INT32(SIH_LOC_LAT0, 454671160);
+PARAM_DEFINE_INT32(SIH_LOC_LAT0, 85455838);
 
 /**
  * Initial geodetic longitude
@@ -261,7 +261,7 @@ PARAM_DEFINE_INT32(SIH_LOC_LAT0, 454671160);
  * @max  1800000000
  * @group Simulation In Hardware
  */
-PARAM_DEFINE_INT32(SIH_LOC_LON0, -737578370);
+PARAM_DEFINE_INT32(SIH_LOC_LON0, 50);
 
 /**
  * Initial AMSL ground altitude

@@ -31,8 +31,10 @@
  *
  ****************************************************************************/
 
-#pragma once
-
+// #pragma once
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Wfloat-equal"
+// #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #include <matrix/matrix/math.hpp>
 #include <perf/perf_counter.h>
 #include <px4_platform_common/px4_config.h>
@@ -57,6 +59,10 @@
 #include <lib/mathlib/math/filter/AlphaFilter.hpp>
 #include <lib/slew_rate/SlewRate.hpp>
 
+//#include "mc_att_lqr.hpp"
+//#include <control-toolbox/ct_optcon/include/ct/optcon/optcon.h>
+//#include "LQR.hpp"
+
 #include <AttitudeControl.hpp>
 
 using namespace time_literals;
@@ -78,6 +84,8 @@ public:
 	static int print_usage(const char *reason = nullptr);
 
 	bool init();
+
+	void lqrtest();
 
 private:
 	void Run() override;
@@ -163,5 +171,16 @@ private:
 
 		(ParamFloat<px4::params::COM_SPOOLUP_TIME>) _param_com_spoolup_time
 	)
+
+	//ct::optcon::TermQuadratic<nStates, nControls> quadraticCost_;
+	// ct::optcon::TermQuadratic<nStates, nControls>::state_matrix_t Q_;
+	// ct::optcon::TermQuadratic<nStates, nControls>::control_matrix_t R_;
+	// ct::optcon::LQR<nStates, nControls> lqrSolver_;
+
+	// state_matrix_t A_;
+    	// control_gain_matrix_t B_;
+	// //ct::core::FeedbackMatrix<nStates, nControls> Kold_;
+	// ct::core::FeedbackMatrix<nStates, nControls> Knew_;
+
 };
 
