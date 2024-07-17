@@ -80,4 +80,4 @@ mc_pos_control start
 #
 land_detector start multicopter
 
-#lqr_module start
+lqr_module start

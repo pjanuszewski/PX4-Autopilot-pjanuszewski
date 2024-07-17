@@ -6,6 +6,7 @@ Licensed under the BSD-2 license (see LICENSE file in main directory)
 #pragma once
 #include <px4_log.h>
 #include <fstream>
+#include <iomanip>
 
 template <size_t STATE_DIM, size_t CONTROL_DIM>
 bool LQR<STATE_DIM, CONTROL_DIM>::compute(const state_matrix_t& Q,
@@ -25,24 +26,23 @@ bool LQR<STATE_DIM, CONTROL_DIM>::compute(const state_matrix_t& Q,
 
     if (success)
     {
-        PX4_INFO("LQR computation successful.");
-
+        //PX4_INFO("LQR computation successful.");
         // Write K matrix to a CSV file
-        std::ofstream file("/home/pawelj/Git_repos/PX4-Autopilot/src/modules/mc_att_control/K_matrix.csv");
+        std::ofstream file("/home/pawelj/Git_repos/PX4-Autopilot/src/modules/lqr_module/K_matrix.csv");
         if (file.is_open())
         {
+            file << std::scientific << std::setprecision(6); // Set scientific notation and precision for all values
             for (int i = 0; i < K.rows(); ++i)
             {
                 for (int j = 0; j < K.cols(); ++j)
                 {
-                    file << K(i, j);
+                    file << std::setw(15) << K(i, j); // Set width for each column
                     if (j != K.cols() - 1)
                         file << ", "; // CSV column separator
                 }
                 file << "\n"; // Newline for next row
             }
             file.close();
-            PX4_INFO("K matrix written to K_matrix.csv");
         }
         else
         {

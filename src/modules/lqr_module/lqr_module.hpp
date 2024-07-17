@@ -27,6 +27,7 @@
 #include <uORB/topics/vehicle_status.h>
 #include <lib/mathlib/math/filter/AlphaFilter.hpp>
 #include <lib/slew_rate/SlewRate.hpp>
+#include <uORB/topics/vehicle_command.h>
 
 using namespace time_literals;
 

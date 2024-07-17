@@ -33,10 +33,21 @@
 
 find_package(LAPACK REQUIRED)
 
+# Manually specify the LAPACK library and include directories
+set(LAPACK_LIBRARIES /usr/local/lib/liblapack.a)
+set(LAPACK_INCLUDE_DIRS /usr/local/include)
+
+# Specify the BLAS library
+set(BLAS_LIBRARIES /usr/local/lib/libblas.a)
+
+# Specify the Fortran runtime library
+set(FORTRAN_LIBRARIES gfortran)
+
 px4_add_module(
     MODULE modules__lqr_module
     MAIN lqr_module
     COMPILE_FLAGS
+    -DDEBUG_BUILD
     ${MAX_CUSTOM_OPT_LEVEL}
     SRCS
         lqr_module_main.cpp
@@ -45,6 +56,9 @@ px4_add_module(
 		CARE.hpp
 		LQR-impl.hpp
 		CARE-impl.hpp
+        lqr_quaternion.cpp
+        lqr_quaternion.hpp
+        declarations_quaternion.hpp
     DEPENDS
         mathlib
         px4_work_queue
@@ -55,7 +69,7 @@ target_compile_definitions(modules__lqr_module PRIVATE CT_USE_LAPACK)
 
 if (LAPACK_FOUND)
     include_directories(${LAPACK_INCLUDE_DIRS})
-    target_link_libraries(modules__lqr_module PUBLIC ${LAPACK_LIBRARIES})
+    target_link_libraries(modules__lqr_module PUBLIC ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES} ${FORTRAN_LIBRARIES})
 else()
     message(FATAL_ERROR "LAPACK library not found.")
 endif()

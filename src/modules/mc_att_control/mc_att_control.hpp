@@ -58,6 +58,8 @@
 #include <uORB/topics/vehicle_status.h>
 #include <lib/mathlib/math/filter/AlphaFilter.hpp>
 #include <lib/slew_rate/SlewRate.hpp>
+#include <iomanip>
+#include <fstream>
 
 //#include "mc_att_lqr.hpp"
 //#include <control-toolbox/ct_optcon/include/ct/optcon/optcon.h>
