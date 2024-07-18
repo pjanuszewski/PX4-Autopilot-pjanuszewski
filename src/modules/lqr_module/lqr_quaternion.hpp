@@ -26,6 +26,9 @@
 #include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/vehicle_status.h>
 #include <uORB/topics/vehicle_command.h>
+#include <uORB/topics/vehicle_local_position_setpoint.h>
+#include <uORB/topics/vehicle_attitude_setpoint.h>
+#include <uORB/topics/vehicle_rates_setpoint.h>
 #include <vector>
 #include "LQR.hpp"
 
@@ -62,7 +65,7 @@ class LQR_Quaternion {
     void setOutput(control_vector_t output);
     control_vector_t getOutput();
     state_vector_t getRefStates();
-    void topicCallback(const vehicle_local_position_s& local_pos, const vehicle_attitude_s& attitude);
+    void topicCallback(const vehicle_local_position_s& local_pos, const vehicle_attitude_s& attitude, const vehicle_local_position_setpoint_s& local_pos_sp, const vehicle_attitude_setpoint_s& attitude_sp, const vehicle_rates_setpoint_s& rates_sp);
     void readTrajectoryFromFile(const std::string &file_path);
     bool initiated;
     std::vector<State>& getStates();
@@ -77,11 +80,15 @@ class LQR_Quaternion {
      */
 
     void setStates(const vehicle_local_position_s& local_pos, const vehicle_attitude_s& attitude, state_vector_t& x);
-    void setError(const state_vector_t& xref, const state_vector_t& x, state_vector_t& xerror);
-    bool setTrajectoryReference(state_vector_t& xref,control_vector_t& uref);
-    //bool setStaticReference(state_vector_t& xref,control_vector_t& uref, Eigen::Vector4d& flat_states);
-    // void convertToNED(state_vector_t& xref, control_vector_t& uref);
-    // Eigen::Quaterniond enuToNed(const Eigen::Quaterniond& q_enu);
+    void setError(const state_vector_t& xref, const state_vector_t& x,
+                  state_vector_t& xerror,
+                  const vehicle_local_position_setpoint_s& local_pos_sp,
+                  const vehicle_attitude_setpoint_s& attitude_sp);
+    bool setTrajectoryReference(state_vector_t& xref, control_vector_t& uref);
+    bool setReference(state_vector_t& xref, control_vector_t& uref,
+                      const vehicle_local_position_setpoint_s& local_pos_sp,
+                      const vehicle_attitude_setpoint_s& attitude_sp,
+                      const vehicle_rates_setpoint_s& rates_sp);
     Eigen::Vector3d quaternion_to_rpy_wrap(const Eigen::Quaterniond &q);
 
     // void generateTrajectory(mav_msgs::EigenTrajectoryPoint::Vector& states);
@@ -100,6 +107,10 @@ class LQR_Quaternion {
     uORB::Subscription _vehicle_attitude_sub{ORB_ID(vehicle_attitude)};
     uORB::Subscription _vehicle_status_sub{ORB_ID(vehicle_status)};
     uORB::Subscription _vehicle_command_sub{ORB_ID(vehicle_command)};
+    uORB::Subscription _vehicle_local_position_setpoint_sub{ORB_ID(vehicle_local_position_setpoint)};
+    uORB::Subscription _vehicle_attitude_setpoint_sub{ORB_ID(vehicle_attitude_setpoint)};
+    uORB::Subscription _vehicle_rates_setpoint_sub{ORB_ID(vehicle_rates_setpoint)};
+    // uORB::Publication<vehicle_rates_setpoint_lqr_s>
 
     //! State and control matrix dimensions
     const size_t state_dim = nStates;

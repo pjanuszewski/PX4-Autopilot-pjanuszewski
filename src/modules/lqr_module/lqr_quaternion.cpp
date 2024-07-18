@@ -55,29 +55,53 @@ LQR_Quaternion::~LQR_Quaternion()
 {
 }
 
-void LQR_Quaternion::setError(const state_vector_t& xref, const state_vector_t& x, state_vector_t& xerror)
+void LQR_Quaternion::setError(const state_vector_t& xref, const state_vector_t& x,
+                              state_vector_t& xerror,
+                              const vehicle_local_position_setpoint_s& local_pos_sp,
+                              const vehicle_attitude_setpoint_s& attitude_sp)
 {
   /*Position error*/
-  xerror(0) = (x(0) - xref(0));
-  xerror(1) = (x(1) - xref(1));
-  xerror(2) = (x(2) - xref(2));
+//   xerror(0) = (x(0) - xref(0));
+//   xerror(1) = (x(1) - xref(1));
+//   xerror(2) = (x(2) - xref(2));
 
-  /*Orientation error*/
-  Eigen::Quaterniond q(x(3), x(4), x(5), x(6));
-  Eigen::Quaterniond qref(xref(3), xref(4), xref(5), xref(6));
-  Eigen::Quaterniond qerror = q.inverse() * qref;
-  xerror(3) = 0;
-  xerror(4) = qerror.x();
-  xerror(5) = qerror.y();
-  xerror(6) = qerror.z();
+//   /*Orientation error*/
+//   Eigen::Quaterniond q(x(3), x(4), x(5), x(6));
+//   Eigen::Quaterniond qref(xref(3), xref(4), xref(5), xref(6));
+//   Eigen::Quaterniond qerror = q.inverse() * qref;
+//   xerror(3) = 0;
+//   xerror(4) = qerror.x();
+//   xerror(5) = qerror.y();
+//   xerror(6) = qerror.z();
 
-  /*Velocity error*/
-  xerror(7) = (x(7) - xref(7));
-  xerror(8) = (x(8) - xref(8));
-  xerror(9) = (x(9) - xref(9));
+//   /*Velocity error*/
+//   xerror(7) = (x(7) - xref(7));
+//   xerror(8) = (x(8) - xref(8));
+//   xerror(9) = (x(9) - xref(9));
+
+//////////////////////////////////////////////////////////////////////////
+
+    xerror(0) = static_cast<double>(x(0)) - static_cast<double>(local_pos_sp.y);  // y in FRD becomes x in ENU
+    xerror(1) = static_cast<double>(x(1)) - static_cast<double>(local_pos_sp.x);  // x in FRD becomes y in ENU
+    xerror(2) = static_cast<double>(x(2)) - static_cast<double>(-local_pos_sp.z); // -z in FRD becomes z in ENU
+
+    Eigen::Quaterniond q(static_cast<double>(x(3)), static_cast<double>(x(4)), static_cast<double>(x(5)), static_cast<double>(x(6)));
+    Eigen::Quaterniond qref(static_cast<double>(attitude_sp.q_d[0]), static_cast<double>(attitude_sp.q_d[2]), static_cast<double>(attitude_sp.q_d[1]), static_cast<double>(-attitude_sp.q_d[3])); // Convert quaternion from FRD to ENU
+    Eigen::Quaterniond qerror = q.inverse() * qref;
+    xerror(3) = 0;
+    xerror(4) = qerror.x();
+    xerror(5) = qerror.y();
+    xerror(6) = qerror.z();
+
+    xerror(7) = static_cast<double>(x(7)) - static_cast<double>(local_pos_sp.vy);  // vy in FRD becomes vx in ENU
+    xerror(8) = static_cast<double>(x(8)) - static_cast<double>(local_pos_sp.vx);  // vx in FRD becomes vy in ENU
+    xerror(9) = static_cast<double>(x(9)) - static_cast<double>(-local_pos_sp.vz); // -vz in FRD becomes vz in ENU
 }
 
-void LQR_Quaternion::topicCallback(const vehicle_local_position_s& local_pos, const vehicle_attitude_s& attitude)
+void LQR_Quaternion::topicCallback(const vehicle_local_position_s& local_pos, const vehicle_attitude_s& attitude,
+                                   const vehicle_local_position_setpoint_s& local_pos_sp,
+                                   const vehicle_attitude_setpoint_s& attitude_sp,
+                                   const vehicle_rates_setpoint_s& rates_sp)
 {
 
     try
@@ -89,16 +113,24 @@ void LQR_Quaternion::topicCallback(const vehicle_local_position_s& local_pos, co
         return;
     }
 
+    // try {
+    //     setTrajectoryReference(xref_, uref_);
+    //     //PX4_INFO("setTrajectoryReference executed successfully");
+    // } catch (const std::exception &e) {
+    //     PX4_ERR("Exception in setTrajectoryReference: %s", e.what());
+    //     return;
+    // }
+
     try {
-        setTrajectoryReference(xref_, uref_);
-        //PX4_INFO("setTrajectoryReference executed successfully");
-    } catch (const std::exception &e) {
-        PX4_ERR("Exception in setTrajectoryReference: %s", e.what());
+        setReference(xref_, uref_, local_pos_sp, attitude_sp, rates_sp);
+        //PX4_INFO("setReference executed successfully");
+    }   catch (const std::exception &e) {
+        PX4_ERR("Exception in setReference: %s", e.what());
         return;
     }
 
     try {
-        setError(xref_, x_, xerror_);
+        setError(xref_, x_, xerror_, local_pos_sp, attitude_sp);
         //PX4_INFO("setError executed successfully");
     } catch (const std::exception &e) {
         PX4_ERR("Exception in setError: %s", e.what());
@@ -106,10 +138,20 @@ void LQR_Quaternion::topicCallback(const vehicle_local_position_s& local_pos, co
     }
 
     // Check for NaN values in state vectors
-    if (x_.hasNaN() || xref_.hasNaN() || xerror_.hasNaN()) {
-        PX4_ERR("NaN detected in state vectors");
+    if (x_.hasNaN()) {
+        PX4_ERR("NaN detected in state vector x_");
         return;
     }
+    if (xref_.hasNaN()) {
+        PX4_ERR("NaN detected in state vector xref_");
+        return;
+    }
+    if (xerror_.hasNaN()) {
+        PX4_ERR("NaN detected in state vector xerror_");
+        return;
+    }
+
+
 
     if ((hrt_absolute_time() - callBack_) > 100000)
     { // 0.1 seconds in microseconds
@@ -356,6 +398,36 @@ void LQR_Quaternion::readTrajectoryFromFile(const std::string& filename) {
     file.close();
 }
 
+bool LQR_Quaternion::setReference(state_vector_t& xref, control_vector_t& uref,
+                  const vehicle_local_position_setpoint_s& local_pos_sp,
+                  const vehicle_attitude_setpoint_s& attitude_sp,
+                  const vehicle_rates_setpoint_s& rates_sp)
+{
+    // Set position reference
+    xref(0) = local_pos_sp.y;  // y in FRD becomes x in ENU
+    xref(1) = local_pos_sp.x;  // x in FRD becomes y in ENU
+    xref(2) = -local_pos_sp.z; // -z in FRD becomes z in ENU
+
+    // Set orientation reference
+    xref(3) = attitude_sp.q_d[0];
+    xref(4) = attitude_sp.q_d[2]; // Swap x and y for ENU
+    xref(5) = attitude_sp.q_d[1]; // Swap x and y for ENU
+    xref(6) = -attitude_sp.q_d[3]; // Negate z for ENU
+
+    // Set velocity reference
+    xref(7) = local_pos_sp.vy;  // vy in FRD becomes vx in ENU
+    xref(8) = local_pos_sp.vx;  // vx in FRD becomes vy in ENU
+    xref(9) = -local_pos_sp.vz; // -vz in FRD becomes vz in ENU
+
+    // Set control reference
+    uref(0) = rates_sp.roll;
+    uref(1) = rates_sp.pitch;
+    uref(2) = rates_sp.yaw;
+    uref(3) = rates_sp.thrust_body[2];
+
+    return true;
+}
+
 bool LQR_Quaternion::setTrajectoryReference(state_vector_t& xref, control_vector_t& uref)
 {
 
@@ -372,14 +444,6 @@ bool LQR_Quaternion::setTrajectoryReference(state_vector_t& xref, control_vector
     std::vector<double> gamma;
     std::vector<double> dist_traj;
 
-
-    try {
-        gamma.resize(states_.size() - 1);
-        dist_traj.resize(states_.size() - 1);
-    } catch (const std::exception &e) {
-        PX4_ERR("Exception in resizing vectors: %s", e.what());
-        return false;
-    }
 
     std::vector<LQR_Q::State>::size_type i = traj_index - 1;
     std::vector<LQR_Q::State>::size_type end_index = std::min(static_cast<std::vector<LQR_Q::State>::size_type>(traj_index + 50), states_.size() - 1);

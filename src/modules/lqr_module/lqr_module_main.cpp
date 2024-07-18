@@ -95,6 +95,10 @@ void LQRModule::run()
     uORB::Subscription attitude_sub{ORB_ID(vehicle_attitude)};
     uORB::Publication<vehicle_rates_setpoint_s> cmd_raw_pub{ORB_ID(vehicle_rates_setpoint)};
     uORB::Subscription command_sub{ORB_ID(vehicle_command)};
+    uORB::Subscription vehicle_local_position_setpoint_sub{ORB_ID(vehicle_local_position_setpoint)};
+    uORB::Subscription vehicle_attitude_setpoint_sub{ORB_ID(vehicle_attitude_setpoint)};
+    uORB::Subscription vehicle_rates_setpoint_sub{ORB_ID(vehicle_rates_setpoint)};
+    uORB::Subscription parameter_update_sub{ORB_ID(parameter_update)};
 
     vehicle_status_s current_state{}; // Declare the variable
 
@@ -105,25 +109,17 @@ void LQRModule::run()
     // vehicle_command_s command;
     bool mission_started = false;
     vehicle_status_s previous_state = {}; // Initialize previous state
-    bool not_mission_mode_logged = false; // Flag to track if the message has been logged
+    //bool not_mission_mode_logged = false; // Flag to track if the message has been logged
 
 
     while (!mission_started) {
         if (state_sub.update(&current_state)) {
-            if (current_state.nav_state != previous_state.nav_state) {
-                PX4_INFO("Current nav_state: %d", current_state.nav_state);
-                previous_state = current_state; // Update previous state
-                not_mission_mode_logged = false; // Reset the flag when state changes
-            }
-
             if (current_state.nav_state == vehicle_status_s::NAVIGATION_STATE_AUTO_MISSION) {
                 mission_started = true;
                 PX4_INFO("Mission started");
-            } else {
-                if (!not_mission_mode_logged) {
-                    PX4_INFO("Current state is not mission mode");
-                    not_mission_mode_logged = true; // Set the flag to indicate the message has been logged
-                }
+            } else if (current_state.nav_state != previous_state.nav_state) {
+                PX4_INFO("Current nav_state: %d", current_state.nav_state);
+                previous_state = current_state;
             }
         }
 
@@ -144,19 +140,23 @@ void LQRModule::run()
     PX4_INFO("Log file opened");
 
     vehicle_local_position_s local_pos;
-
     vehicle_attitude_s attitude;
-
     vehicle_status_s status;
+    vehicle_rates_setpoint_s rates_sp;
+    vehicle_local_position_setpoint_s local_pos_sp;
+    vehicle_attitude_setpoint_s attitude_sp;
+
 
     LQR_Q::LQR_Quaternion lqr;
+
     lqr.initiated = true;
-    try {
-        lqr.readTrajectoryFromFile("/home/pawelj/Git_repos/PX4-Autopilot/src/modules/lqr_module/log_data_interpolated.csv");
-    } catch (const std::exception &e) {
-        PX4_ERR("Exception in readTrajectoryFromFile: %s", e.what());
-        return;
-    }
+
+    // try {
+    //     lqr.readTrajectoryFromFile("/home/pawelj/Git_repos/PX4-Autopilot/src/modules/lqr_module/log_data_interpolated.csv");
+    // } catch (const std::exception &e) {
+    //     PX4_ERR("Exception in readTrajectoryFromFile: %s", e.what());
+    //     return;
+    // }
 
     // std::cout << "Trajectory read from file" << std::endl;
     // if (lqr.getStates().size() < 10) {
@@ -182,7 +182,7 @@ void LQRModule::run()
 
     // Initialize timing variables
     hrt_abstime last_calculation_time = hrt_absolute_time();
-    const hrt_abstime calculation_interval = 1000000; // Perform calculations every 100ms
+    const hrt_abstime calculation_interval = 100000; // Perform calculations every 100ms
 
 
     // Main loop
@@ -192,78 +192,83 @@ void LQRModule::run()
             current_state = status;
         }
 
-        // Update local position and attitude
-        if (local_pos_sub.update(&local_pos) && attitude_sub.update(&attitude)) {
-            // Check if enough time has passed since the last calculation
-            if (hrt_absolute_time() - last_calculation_time >= calculation_interval) {
-                try {
-                    lqr.topicCallback(local_pos, attitude);
-                } catch (const std::exception &e) {
-                    PX4_ERR("Exception in topicCallback: %s", e.what());
-                    return;
+        // Check if enough time has passed since the last calculation
+        if (hrt_absolute_time() - last_calculation_time >= calculation_interval) {
+
+            // Update the subscriptions
+            local_pos_sub.update(&local_pos);
+            attitude_sub.update(&attitude);
+            vehicle_rates_setpoint_sub.update(&rates_sp);
+            vehicle_local_position_setpoint_sub.update(&local_pos_sp);
+            vehicle_attitude_setpoint_sub.update(&attitude_sp);
+
+            try {
+                lqr.topicCallback(local_pos, attitude, local_pos_sp, attitude_sp, rates_sp);
+            } catch (const std::exception &e) {
+                PX4_ERR("Exception in topicCallback: %s", e.what());
+                return;
+            }
+
+            control_vector_t output = lqr.getTrajectoryControl() - lqr.getGain() * lqr.getError();
+
+            // // Clamping the output values
+            // for (int i = 0; i < 3; i++) {
+            //     if (output(i) > 1.0) {
+            //         output(i) = 1.0;
+            //     } else if (output(i) < -1.0) {
+            //         output(i) = -1.0;
+            //     }
+            // }
+            // if (output(3) > 0) {
+            //     output(3) = 0;
+            // } else if (output(3) < -1.0) {
+            //     output(3) = -1;
+            // }
+
+            lqr.setOutput(output);
+
+            Eigen::Vector3d cmd_body_rate_baselink;
+            cmd_body_rate_baselink << lqr.getOutput()(0),
+                                    lqr.getOutput()(1),
+                                    lqr.getOutput()(2);
+
+            // Transform from ENU to NED
+            Eigen::Vector3d cmd_body_rate_ned;
+            cmd_body_rate_ned << cmd_body_rate_baselink(1),  // North (y in ENU)
+                                cmd_body_rate_baselink(0),  // East (x in ENU)
+                                -cmd_body_rate_baselink(2); // Down (-z in ENU)
+
+            vehicle_rates_setpoint_s bodyrate_msg{};
+            bodyrate_msg.roll = cmd_body_rate_ned(0);
+            bodyrate_msg.pitch = cmd_body_rate_ned(1);
+            bodyrate_msg.yaw = cmd_body_rate_ned(2);
+            bodyrate_msg.thrust_body[2] = -lqr.getOutput()(3); // Thrust should also be negated for NED
+
+            try {
+                // Ensure the values are valid before logging
+                if (!std::isnan(bodyrate_msg.roll) && !std::isnan(bodyrate_msg.pitch) &&
+                    !std::isnan(bodyrate_msg.yaw) && !std::isnan(bodyrate_msg.thrust_body[0])) {
+
+                    // Log the bodyrate_msg in a formatted manner
+                    const int space = 20; // Adjust the width as needed
+                    log_file << std::fixed << std::setprecision(8)
+                            << "Roll: " << std::right << std::setw(space) << bodyrate_msg.roll << "  |  "
+                            << "Pitch: " << std::right << std::setw(space) << bodyrate_msg.pitch << "  |  "
+                            << "Yaw: " << std::right << std::setw(space) << bodyrate_msg.yaw << "  |  "
+                            << "Thrust[0]: " << std::right << std::setw(space) << bodyrate_msg.thrust_body[0] << "  |  "
+                            << "Thrust[1]: " << std::right << std::setw(space) << bodyrate_msg.thrust_body[1] << "  |  "
+                            << "Thrust[2]: " << std::right << std::setw(space) << bodyrate_msg.thrust_body[2] << std::endl;
                 }
+            } catch (const std::exception &e) {
+                PX4_ERR("Exception while writing to log file: %s", e.what());
+            }
 
-                control_vector_t output = lqr.getTrajectoryControl() - lqr.getGain() * lqr.getError();
-
-                // // Clamping the output values
-                // for (int i = 0; i < 3; i++) {
-                //     if (output(i) > 1.0) {
-                //         output(i) = 1.0;
-                //     } else if (output(i) < -1.0) {
-                //         output(i) = -1.0;
-                //     }
-                // }
-                // if (output(3) > 0) {
-                //     output(3) = 0;
-                // } else if (output(3) < -1.0) {
-                //     output(3) = -1;
-                // }
-
-                lqr.setOutput(output);
-
-                Eigen::Vector3d cmd_body_rate_baselink;
-                cmd_body_rate_baselink << lqr.getOutput()(0),
-                                        lqr.getOutput()(1),
-                                        lqr.getOutput()(2);
-
-                // Transform from ENU to NED
-                Eigen::Vector3d cmd_body_rate_ned;
-                cmd_body_rate_ned << cmd_body_rate_baselink(1),  // North (y in ENU)
-                                    cmd_body_rate_baselink(0),  // East (x in ENU)
-                                    -cmd_body_rate_baselink(2); // Down (-z in ENU)
-
-                vehicle_rates_setpoint_s bodyrate_msg{};
-                bodyrate_msg.roll = cmd_body_rate_ned(0);
-                bodyrate_msg.pitch = cmd_body_rate_ned(1);
-                bodyrate_msg.yaw = cmd_body_rate_ned(2);
-                bodyrate_msg.thrust_body[2] = -lqr.getOutput()(3)/20; // Thrust should also be negated for NED
-
-                try {
-                    // Ensure the values are valid before logging
-                    if (!std::isnan(bodyrate_msg.roll) && !std::isnan(bodyrate_msg.pitch) &&
-                        !std::isnan(bodyrate_msg.yaw) && !std::isnan(bodyrate_msg.thrust_body[0])) {
-
-                        // Log the bodyrate_msg in a formatted manner
-                        const int space = 20; // Adjust the width as needed
-                        log_file << std::fixed << std::setprecision(8)
-                                << "Roll: " << std::right << std::setw(space) << bodyrate_msg.roll << "  |  "
-                                << "Pitch: " << std::right << std::setw(space) << bodyrate_msg.pitch << "  |  "
-                                << "Yaw: " << std::right << std::setw(space) << bodyrate_msg.yaw << "  |  "
-                                << "Thrust[0]: " << std::right << std::setw(space) << bodyrate_msg.thrust_body[0] << "  |  "
-                                << "Thrust[1]: " << std::right << std::setw(space) << bodyrate_msg.thrust_body[1] << "  |  "
-                                << "Thrust[2]: " << std::right << std::setw(space) << bodyrate_msg.thrust_body[2] << std::endl;
-                    }
-                } catch (const std::exception &e) {
-                    PX4_ERR("Exception while writing to log file: %s", e.what());
-                }
-
-                // Update the last calculation time
-                last_calculation_time = hrt_absolute_time();
+            // Update the last calculation time
+            last_calculation_time = hrt_absolute_time();
             }
         }
 
-        px4_usleep(1000000); // Sleep for 10ms to reduce CPU usage
-    }
+        px4_usleep(100000); // Sleep for 10ms to reduce CPU usage
 
     log_file.close();
 }
