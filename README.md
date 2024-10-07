@@ -3,13 +3,13 @@
 ## Overview
 This repository integrates the **Control Toolbox (CT)** library into the **PX4 Autopilot** environment. The main goal is to demonstrate the feasibility of running Control Toolbox functions, such as **LQR computation** (Riccati equation), during the runtime of PX4 simulations.
 
-The `lqr4_runtime` branch successfully demonstrates the real-time calculation of the **LQR K matrix** during simulation, though it does not yet produce the desired trajectory-following behavior for the drone.
+The `lqr_runtime` branch successfully demonstrates the real-time calculation of the **LQR K matrix** during simulation, though it does not yet produce the desired trajectory-following behavior for the drone.
 
 ## Features
 - **LQR Runtime Calculation**:
-  - The `lqr4_runtime` branch proves that the **Riccati equation** and **LQR K matrix** can be computed in real time during PX4 simulations.
+  - The `lqr_runtime` branch proves that the **Riccati equation** and **LQR K matrix** can be computed in real time during PX4 simulations.
   - This setup can serve as a reference for implementing LQR or other control methods in PX4.
-  - The `lqr4_traj` branch includes efforts to achieve precise trajectory-following and demonstrates that LQR can be used at a high frequency during runtime based on current states, but the simulation does not yet meet the desired results.
+  - The `lqr_about_trajectory` branch includes efforts to achieve precise trajectory-following and demonstrates that LQR can be used at a high frequency during runtime based on current states, but the simulation does not yet meet the desired results.
 
 - **Control Toolbox Integration**:
   - **Control Toolbox** is used as a submodule. After running `make distclean`, reinitialize the submodule with:
@@ -41,7 +41,7 @@ The `lqr4_runtime` branch successfully demonstrates the real-time calculation of
 - **Note**: Modifications are needed due to PX4’s stricter compiler standards. Common issues include uninitialized variables or handling floating-point (`wfloat`) warnings.
 
 ## Known Issues
-- The current implementation in the `lqr4_traj` branch does not achieve precise trajectory-following for the drone.
+- The current implementation in the `lqr_about_trajectory` branch does not achieve precise trajectory-following for the drone.
 - **Strict compiler standards** in PX4 require adaptations of the Control Toolbox functions (e.g., handling uninitialized variables or floating-point (`wfloat`) warnings).
 - Users may need to make additional modifications when integrating LQR or other control methods.
 
