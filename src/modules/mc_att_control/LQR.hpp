@@ -57,6 +57,7 @@ public:
         bool RisDiagonal = false,
         bool solveRiccatiIteratively = false);
 
+	void lqrtest();
 private:
     CARE<STATE_DIM, CONTROL_DIM> care_;  // continuous-time algebraic riccati equation
 };

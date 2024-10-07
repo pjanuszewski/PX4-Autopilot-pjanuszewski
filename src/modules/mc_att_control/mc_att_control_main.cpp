@@ -51,11 +51,11 @@
 
 #include "AttitudeControl/AttitudeControlMath.hpp"
 
-// #ifdef CT_USE_LAPACK
-// #pragma message("CT_USE_LAPACK is defined")
-// #else
-// #pragma message("CT_USE_LAPACK is not defined")
-// #endif
+#ifdef CT_USE_LAPACK
+#pragma message("CT_USE_LAPACK is defined")
+#else
+#pragma message("CT_USE_LAPACK is not defined")
+#endif
 
 using namespace matrix;
 
@@ -66,7 +66,6 @@ MulticopterAttitudeControl::MulticopterAttitudeControl(bool vtol) :
 	_loop_perf(perf_alloc(PC_ELAPSED, MODULE_NAME": cycle")),
 	_vtol(vtol)
 {
-	//lqrtest();
 	parameters_updated();
 	// Rate of change 5% per second -> 1.6 seconds to ramp to default 8% MPC_MANTHR_MIN
 	_manual_throttle_minimum.setSlewRate(0.05f);
@@ -92,8 +91,8 @@ MulticopterAttitudeControl::init()
 		PX4_ERR("Failed to open PID log file");
 	}
 
-	// LQR<2, 1, double> lqr_instance;
-	// lqr_instance.lqrtest();
+	LQR<2, 1> lqr_instance;
+	lqr_instance.lqrtest();
 	return true;
 }
 
@@ -442,41 +441,23 @@ int MulticopterAttitudeControl::custom_command(int argc, char *argv[])
 	return print_usage("unknown command");
 }
 
-// void MulticopterAttitudeControl::testLQRSolver() {
-
-//     // Example values for testing
-//     Q_ << 1, 0,
-//           0, 2;
-//     R_ << 2;
-//     A_ << 0, 1,
-//           0.01, 0;
-//     B_ << 0,
-//           1;
-
-//     if (lqrSolver_.compute(Q_, R_, A_, B_, Knew_)) {
-//         PX4_INFO("LQR computation successful");
-//     } else {
-//         PX4_ERR("LQR computation failed");
-//     }
-//         // Reset the unique pointers to ensure they are destroyed here if that's required
-// }
-
-// void MulticopterAttitudeControl::lqrtest() {
-// 	LQR<2, 1> lqr_instance;
-// 	LQR<2, 1>::state_matrix_t A_;
-// 	LQR<2, 1>::control_gain_matrix_t B_;
-// 	LQR<2, 1>::state_matrix_t Q_;
-// 	LQR<2, 1>::control_matrix_t R_;
-// 	LQR<2, 1>::control_feedback_t K_;
-// 	A_ << 0, 1,
-// 	      0.01, 0;
-// 	B_ << 0,
-// 	      1;
-// 	Q_ << 1, 0,
-// 	      0, 2;
-// 	R_ << 2;
-// 	lqr_instance.compute(Q_, R_, A_, B_, K_);
-// }
+template <size_t STATE_DIM, size_t CONTROL_DIM>
+void LQR<STATE_DIM, CONTROL_DIM>::lqrtest() {
+	LQR<2, 1> lqr_instance;
+	LQR<2, 1>::state_matrix_t A_;
+	LQR<2, 1>::control_gain_matrix_t B_;
+	LQR<2, 1>::state_matrix_t Q_;
+	LQR<2, 1>::control_matrix_t R_;
+	LQR<2, 1>::control_feedback_t K_;
+	A_ << 0, 1,
+	      0.01, 0;
+	B_ << 0,
+	      1;
+	Q_ << 1, 0,
+	      0, 2;
+	R_ << 2;
+	lqr_instance.compute(Q_, R_, A_, B_, K_);
+}
 
 int MulticopterAttitudeControl::print_usage(const char *reason)
 {
