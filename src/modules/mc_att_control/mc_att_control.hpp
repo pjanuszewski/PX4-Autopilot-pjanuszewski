@@ -32,7 +32,9 @@
  ****************************************************************************/
 
 #pragma once
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfloat-equal"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #include <matrix/matrix/math.hpp>
 #include <perf/perf_counter.h>
 #include <px4_platform_common/px4_config.h>
@@ -56,6 +58,9 @@
 #include <uORB/topics/vehicle_status.h>
 #include <lib/mathlib/math/filter/AlphaFilter.hpp>
 #include <lib/slew_rate/SlewRate.hpp>
+#include <iomanip>
+#include <fstream>
+#include "LQR.hpp"
 
 #include <AttitudeControl.hpp>
 
@@ -78,6 +83,7 @@ public:
 	static int print_usage(const char *reason = nullptr);
 
 	bool init();
+
 
 private:
 	void Run() override;

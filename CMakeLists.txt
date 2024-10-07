@@ -219,6 +219,8 @@ endif()
 #
 project(px4 CXX C ASM)
 
+find_package(Eigen3 REQUIRED)
+
 # CMake build type (Debug Release RelWithDebInfo MinSizeRel Coverage)
 if(NOT CMAKE_BUILD_TYPE)
 	if(${PX4_PLATFORM} STREQUAL "nuttx")
@@ -361,6 +363,7 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${ep_base}/Install/li
 link_directories(${ep_base}/Install/lib)
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${ep_base}/Install/include)
 include_directories(${ep_base}/Install/include)
+include_directories(${EIGEN3_INCLUDE_DIR})
 
 #=============================================================================
 # external modules

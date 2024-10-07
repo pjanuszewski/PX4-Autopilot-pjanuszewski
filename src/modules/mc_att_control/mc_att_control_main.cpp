@@ -51,6 +51,12 @@
 
 #include "AttitudeControl/AttitudeControlMath.hpp"
 
+#ifdef CT_USE_LAPACK
+#pragma message("CT_USE_LAPACK is defined")
+#else
+#pragma message("CT_USE_LAPACK is not defined")
+#endif
+
 using namespace matrix;
 
 MulticopterAttitudeControl::MulticopterAttitudeControl(bool vtol) :
@@ -79,7 +85,14 @@ MulticopterAttitudeControl::init()
 		PX4_ERR("callback registration failed");
 		return false;
 	}
+	// Open the log file in append mode for subsequent writes
+	std::ofstream pid_log_file("/home/pawelj/Git_repos/PX4-Autopilot/src/modules/mc_att_control/pid_data.log", std::ios::out | std::ios::trunc);
+	if (!pid_log_file.is_open()) {
+		PX4_ERR("Failed to open PID log file");
+	}
 
+	LQR<2, 1> lqr_instance;
+	lqr_instance.lqrtest();
 	return true;
 }
 
@@ -205,6 +218,13 @@ MulticopterAttitudeControl::generate_attitude_setpoint(const Quatf &q, float dt,
 void
 MulticopterAttitudeControl::Run()
 {
+	// Open the log file in append mode for subsequent writes
+	std::ofstream pid_log_file("/home/pawelj/Git_repos/PX4-Autopilot/src/modules/mc_att_control/pid_data.log", std::ios::out | std::ios::app);
+	if (!pid_log_file.is_open()) {
+		PX4_ERR("Failed to open PID log file");
+		return;
+	}
+
 	if (should_exit()) {
 		_vehicle_attitude_sub.unregisterCallback();
 		exit_and_cleanup();
@@ -305,6 +325,8 @@ MulticopterAttitudeControl::Run()
 
 		bool run_att_ctrl = _vehicle_control_mode.flag_control_attitude_enabled && (is_hovering || is_tailsitter_transition);
 
+		static int log_counter = 0;
+
 		if (run_att_ctrl) {
 
 			// Generate the attitude setpoint from stick inputs if we are in Manual/Stabilized mode
@@ -345,6 +367,20 @@ MulticopterAttitudeControl::Run()
 			rates_setpoint.timestamp = hrt_absolute_time();
 
 			_vehicle_rates_setpoint_pub.publish(rates_setpoint);
+
+			// Log the PID setpoints in a formatted manner
+			if (log_counter % 100 == 0) {
+			const int space = 20; // Adjust the width as needed
+			pid_log_file << std::fixed << std::setprecision(15)
+				<< "Roll: " << std::right << std::setw(space) << rates_setpoint.roll << "  |  "
+				<< "Pitch: " << std::right << std::setw(space) << rates_setpoint.pitch << "  |  "
+				<< "Yaw: " << std::right << std::setw(space) << rates_setpoint.yaw << "  |  "
+				<< "Thrust[0]: " << std::right << std::setw(space) << rates_setpoint.thrust_body[0] << "  |  "
+				<< "Thrust[1]: " << std::right << std::setw(space) << rates_setpoint.thrust_body[1] << "  |  "
+				<< "Thrust[2]: " << std::right << std::setw(space) << rates_setpoint.thrust_body[2] << std::endl;
+			}
+			log_counter++;
+
 		}
 
 		if (_landed) {
@@ -365,7 +401,7 @@ MulticopterAttitudeControl::Run()
 		// attitude setpoint for the transition
 		_reset_yaw_sp = !attitude_setpoint_generated || !_heading_good_for_control || (_vtol && _vtol_in_transition_mode);
 	}
-
+	pid_log_file.close();
 	perf_end(_loop_perf);
 }
 
@@ -403,6 +439,24 @@ int MulticopterAttitudeControl::task_spawn(int argc, char *argv[])
 int MulticopterAttitudeControl::custom_command(int argc, char *argv[])
 {
 	return print_usage("unknown command");
+}
+
+template <size_t STATE_DIM, size_t CONTROL_DIM>
+void LQR<STATE_DIM, CONTROL_DIM>::lqrtest() {
+	LQR<2, 1> lqr_instance;
+	LQR<2, 1>::state_matrix_t A_;
+	LQR<2, 1>::control_gain_matrix_t B_;
+	LQR<2, 1>::state_matrix_t Q_;
+	LQR<2, 1>::control_matrix_t R_;
+	LQR<2, 1>::control_feedback_t K_;
+	A_ << 0, 1,
+	      0.01, 0;
+	B_ << 0,
+	      1;
+	Q_ << 1, 0,
+	      0, 2;
+	R_ << 2;
+	lqr_instance.compute(Q_, R_, A_, B_, K_);
 }
 
 int MulticopterAttitudeControl::print_usage(const char *reason)

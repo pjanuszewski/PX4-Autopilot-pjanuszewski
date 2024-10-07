@@ -1,0 +1,5 @@
+menuconfig MODULES_LQR_MODULE
+    bool "lqr_module"
+    default n
+    ---help---
+        Enable support for lqr_module

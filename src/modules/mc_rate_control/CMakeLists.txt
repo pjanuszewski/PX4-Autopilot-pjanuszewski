@@ -35,6 +35,7 @@ px4_add_module(
 	MODULE modules__mc_rate_control
 	MAIN mc_rate_control
 	COMPILE_FLAGS
+		-DTRACE_BUILD
 		${MAX_CUSTOM_OPT_LEVEL}
 	SRCS
 		MulticopterRateControl.cpp
@@ -45,3 +46,7 @@ px4_add_module(
 		RateControl
 		px4_work_queue
 	)
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+	target_compile_options(modules__mc_rate_control PRIVATE -Wno-float-equal)
+endif()

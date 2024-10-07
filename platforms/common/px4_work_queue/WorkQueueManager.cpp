@@ -290,25 +290,25 @@ WorkQueueManagerRun(int, char **)
 			int ret_setstacksize = pthread_attr_setstacksize(&attr, stacksize);
 
 			if (ret_setstacksize != 0) {
-				PX4_ERR("setting stack size for %s failed (%i)", wq->name, ret_setstacksize);
+			PX4_ERR("setting stack size for %s failed (%i)", wq->name, ret_setstacksize);
 			}
 
 			if (ret_attr_init != 0) {
-				PX4_ERR("attr init for %s failed (%i)", wq->name, ret_attr_init);
+			PX4_ERR("attr init for %s failed (%i)", wq->name, ret_attr_init);
 			}
 
 			sched_param param;
 			int ret_getschedparam = pthread_attr_getschedparam(&attr, &param);
 
 			if (ret_getschedparam != 0) {
-				PX4_ERR("getting sched param for %s failed (%i)", wq->name, ret_getschedparam);
+			PX4_ERR("getting sched param for %s failed (%i)", wq->name, ret_getschedparam);
 			}
 
 			// schedule policy FIFO
 			int ret_setschedpolicy = pthread_attr_setschedpolicy(&attr, SCHED_FIFO);
 
 			if (ret_setschedpolicy != 0) {
-				PX4_ERR("failed to set sched policy SCHED_FIFO (%i)", ret_setschedpolicy);
+			PX4_ERR("failed to set sched policy SCHED_FIFO (%i)", ret_setschedpolicy);
 			}
 
 			// priority
@@ -316,18 +316,25 @@ WorkQueueManagerRun(int, char **)
 			int ret_setschedparam = pthread_attr_setschedparam(&attr, &param);
 
 			if (ret_setschedparam != 0) {
-				PX4_ERR("setting sched params for %s failed (%i)", wq->name, ret_setschedparam);
+			PX4_ERR("setting sched params for %s failed (%i)", wq->name, ret_setschedparam);
 			}
+
+			// Log all attribute values before creating the thread
+			PX4_INFO("Creating thread '%s' with attributes: stack size = %zu, priority = %d", wq->name, stacksize, param.sched_priority);
 
 			// create thread
 			pthread_t thread;
 			int ret_create = pthread_create(&thread, &attr, WorkQueueRunner, (void *)wq);
+			// platforms/nuttx/NuttX/nuttx/libs/libc/pthread/pthread_create.c
 
 			if (ret_create == 0) {
 				PX4_DEBUG("starting: %s, priority: %d, stack: %zu bytes", wq->name, param.sched_priority, stacksize);
 
 			} else {
+				PX4_ERR("Thread ID: %lu", (unsigned long)thread);
 				PX4_ERR("failed to create thread for %s (%i): %s", wq->name, ret_create, strerror(ret_create));
+				PX4_ERR("Error occurred at %s:%d", __FILE__, __LINE__);
+				PX4_ERR("Thread attributes: stack size = %zu, priority = %d", stacksize, param.sched_priority);
 			}
 
 			// destroy thread attributes

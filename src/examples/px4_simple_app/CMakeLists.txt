@@ -37,3 +37,8 @@ px4_add_module(
 		px4_simple_app.c
 	DEPENDS
 	)
+	find_package(OpenMP)
+	if(OpenMP_CXX_FOUND)
+	    target_link_libraries(examples__px4_simple_app PUBLIC OpenMP::OpenMP_CXX)
+	endif()
+

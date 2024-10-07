@@ -32,6 +32,8 @@
 ############################################################################
 
 add_subdirectory(AttitudeControl)
+find_package(LAPACK REQUIRED)
+find_package(ct_optcon REQUIRED)  # Find the ct_optcon package
 
 px4_add_module(
 	MODULE modules__mc_att_control
@@ -41,8 +43,27 @@ px4_add_module(
 	SRCS
 		mc_att_control_main.cpp
 		mc_att_control.hpp
+		LQR.hpp
+		CARE.hpp
+		LQR-impl.hpp
+		CARE-impl.hpp
 	DEPENDS
 		AttitudeControl
 		mathlib
 		px4_work_queue
 	)
+
+target_compile_definitions(modules__mc_att_control PRIVATE CT_USE_LAPACK)
+
+if (LAPACK_FOUND)
+	include_directories(${LAPACK_INCLUDE_DIRS})
+	target_link_libraries(modules__mc_att_control PUBLIC ${LAPACK_LIBRARIES})
+else()
+	message(FATAL_ERROR "LAPACK library not found.")
+endif()
+
+find_package(ct_optcon REQUIRED)  # Find the ct_optcon package
+if(ct_optcon_FOUND)
+	include_directories(${ct_optcon_INCLUDE_DIRS})
+	target_link_libraries(modules__mc_att_control PUBLIC ${ct_optcon_LIBRARIES})
+endif()

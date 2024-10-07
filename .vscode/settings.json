@@ -7,8 +7,8 @@
         "C_Cpp.default.browse.limitSymbolsToIncludedHeaders": true,
         "C_Cpp.default.cppStandard": "c++14",
         "C_Cpp.default.cStandard": "c11",
-        "C_Cpp.formatting": "Disabled",
-        "C_Cpp.intelliSenseEngine": "Default",
+        "C_Cpp.formatting": "clangFormat",
+        "C_Cpp.intelliSenseEngine": "Tag Parser",
         "C_Cpp.vcpkg.enabled": false,
         "C_Cpp.workspaceParsingPriority": "low",
         "cmake.buildBeforeRun": true,
@@ -40,7 +40,10 @@
         "files.insertFinalNewline": true,
         "files.trimTrailingWhitespace": true,
         "files.watcherExclude": {
-                "**/build/**": true
+                "**/.git/**": true,
+                "**/node_modules/**": true,
+                "**/build/**": true,
+                "**/logs/**": true
         },
         "git.detectSubmodulesLimit": 20,
         "git.ignoreLimitWarning": true,
@@ -121,12 +124,31 @@
                 "*.sdf": "xml"
         },
         "search.exclude": {
-                "${workspaceFolder}/build": true
+                "**/node_modules/**": true,
+                "**/bower_components/**": true,
+                "**/build/**": true,
+                "**/.git/**": true,
+                "**/logs/**": true,
+                "**/tmp/**": true  // Exclude temporary files and directories
         },
         "search.showLineNumbers": true,
         "terminal.integrated.scrollback": 15000,
         "yaml.schemas": {
                 "${workspaceFolder}/validation/module_schema.yaml": "${workspaceFolder}/src/modules/*/module.yaml"
         },
-        "ros.distro": "humble"
+        "ros.distro": "humble",
+        "python.autoComplete.extraPaths": [
+                "/opt/ros/humble/lib/python3.10/site-packages",
+                "/opt/ros/humble/local/lib/python3.10/dist-packages"
+        ],
+        "python.analysis.extraPaths": [
+                "/opt/ros/humble/lib/python3.10/site-packages",
+                "/opt/ros/humble/local/lib/python3.10/dist-packages"
+        ],
+        "editor.fontSize": 8,
+        "chat.editor.fontSize": 8,
+        "debug.console.fontSize": 8,
+        "scm.inputFontSize": 8,
+        "terminal.integrated.fontSize": 10,
+        "markdown.preview.fontSize": 8
 }

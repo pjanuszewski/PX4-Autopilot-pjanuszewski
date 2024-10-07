@@ -39,7 +39,15 @@
 
 #pragma once
 
+#include <tinyxml2.h>
+//#include <control-toolbox/ct_optcon/include/ct/optcon/optcon.h>
 #include <matrix/matrix/math.hpp>
+#include <iostream>
+#include <string>
+#include <Eigen/Dense>
+#include <vector>
+#include <fstream>
+#include <drivers/drv_hrt.h>
 
 #include <mathlib/mathlib.h>
 #include <uORB/topics/rate_ctrl_status.h>
@@ -47,8 +55,29 @@
 class RateControl
 {
 public:
+
 	RateControl() = default;
 	~RateControl() = default;
+
+
+	// void setLqrMatrices();
+	// bool computeLqr();
+
+	matrix::Vector3f lqrUpdate(const matrix::Vector3f &position, const matrix::Vector3f &position_sp,
+				    const matrix::Vector3f &velocity, const matrix::Vector3f &velocity_sp,
+				    const float (&quaternion1)[4], const float (&quaternion_sp)[4],
+				    const matrix::Vector3f &rate, const matrix::Vector3f &rate_sp,
+				    const matrix::Vector3f &angular_accel, const hrt_abstime &current_time);
+	void setLqrGains(const std::string &mode);
+	void printWorkingDirectory();
+
+	float quaternion_multiply(const float (&quaternion1)[4], const float (&quaternion2)[4]);
+
+	static const size_t stateDim = 8;
+    	static const size_t controlDim = 4;
+	std::vector<matrix::Matrix<float, controlDim, stateDim>> readMatricesFromFile(const std::string &filename);
+
+	// Add this in rate_control.hpp or at the top of rate_control.cpp
 
 	/**
 	 * Set the rate control PID gains
@@ -114,11 +143,47 @@ public:
 		}
 	}
 
+	static constexpr float A_z = 0.1f;
+	static constexpr float A_r = 0.2f;
+	static constexpr float I_xx = 0.02f; // Inertia around the X-axis
+	static constexpr float I_yy = 0.02f; // Inertia around the Y-axis
+	static constexpr float I_zz = 0.04f; // Inertia around the Z-axisa
+	static constexpr float mass = 1.5f;  // Mass of the vehicle
+
+	// ct::optcon::LQR<stateDim, controlDim> lqr;
+
+	// Eigen::Matrix<double, stateDim, stateDim> A;
+	// Eigen::Matrix<double, stateDim, controlDim> B;
+	// Eigen::Matrix<double, stateDim, stateDim> Q;
+	// Eigen::Matrix<double, controlDim, controlDim> R;
+	// Eigen::Matrix<double, controlDim, stateDim> K;
+	matrix::Vector3f K_lqr;
 	/**
 	 * Get status message of controller for logging/debugging
 	 * @param rate_ctrl_status status message to fill with internal states
 	 */
 	void getRateControlStatus(rate_ctrl_status_s &rate_ctrl_status);
+	matrix::Matrix<float, RateControl::controlDim, RateControl::stateDim> readMatrixFromFile(const std::string &filename);
+
+	void updateKMatrix(const hrt_abstime &current_time_us);
+
+	void quaternion_multiply(const float (&q1)[4], const float (&q2)[4], float (&q)[4]);
+
+	enum class LqrMode {
+	Hover,
+	Trajectory,
+	Invalid
+	};
+
+	void updateMissionStartTime() {
+           mission_start_time = hrt_absolute_time();
+	}
+
+	Eigen::Quaterniond quaternionDifference(const Eigen::Quaterniond& q1, const Eigen::Quaterniond& q2);
+
+	static void mavlink_quaternion_to_dcm(const float quaternion[4], float dcm[3][3]);
+	static void mavlink_dcm_to_euler(const float dcm[3][3], float* roll, float* pitch, float* yaw);
+	static void mavlink_quaternion_to_euler(const float quaternion[4], float* roll, float* pitch, float* yaw);
 
 private:
 	void updateIntegral(matrix::Vector3f &rate_error, const float dt);
@@ -136,4 +201,20 @@ private:
 	// Feedback from control allocation
 	matrix::Vector<bool, 3> _control_allocator_saturation_negative;
 	matrix::Vector<bool, 3> _control_allocator_saturation_positive;
+
+	std::string K_value_file_path = "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_value.csv";
+	std::string K_matrices_file_path = "/home/pawelj/Git_repos/PX4-Autopilot/src/lib/rate_control/K_matrices.csv";
+
+	std::vector<matrix::Matrix<float, controlDim, stateDim>> K_matrices;
+	hrt_abstime mission_start_time;
+
+	LqrMode current_mode;
+
+	//LQR variables
+
+	matrix::Matrix<float, controlDim, stateDim> K_matrix;
+	//ct::optcon::LQR<stateDim, controlDim>::control_feedback_t K_iterative;
+	matrix::Vector3f K = matrix::Vector3f(0.83923, 0.83923, 0.858301);
+	matrix::Vector3f K_hover = matrix::Vector3f(0.9726599304, 0.9726599304, 0.9904326023);
+	matrix::Vector3f K_trajectory = matrix::Vector3f(0.9726599304, 0.9726599304, 0.9904326023);
 };

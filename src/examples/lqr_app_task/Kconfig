@@ -1,0 +1,5 @@
+menuconfig EXAMPLES_LQR_APP_TASK
+	bool "lqr_app_task"
+	default n
+	---help---
+		Enable support for lqr_app_task
