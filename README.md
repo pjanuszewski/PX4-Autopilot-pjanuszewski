@@ -35,6 +35,10 @@ The `lqr_runtime` branch successfully demonstrates the real-time calculation of 
      git submodule update --init --recursive
      ```
 
+4. **Start a Simulation**:
+   - The process for starting a simulation is the same as described in the [PX4 documentation](https://docs.px4.io/main/en/simulation/).
+   - Refer to the documentation for detailed instructions on different simulators and usage.
+
 ## Using the LQR Functionality
 - LQR-related functions have been copied to the `src/modules/mc_att_control/` folder and modified.
 - The functions demonstrate the computation of **LQR matrices** during simulation but require further adaptation for specific control tasks.
